@@ -1,0 +1,159 @@
+<% include ./partials/header %>
+
+<!-- Top content -->
+<div class="container mt-1">
+    <!-- logged in user-->
+    <% if ( user ) { %>
+    <div class="row">
+        <div class="col-sm-12 form-box">
+            <div class="form-top">
+                <div class="form-top-left">
+                    <h3><strong>Create Team now</strong></h3>
+                    <p>Fill in the form below</p>
+                </div>
+            </div>
+            <div class="form-bottom">
+                <form id="form-team-create" role="form" action="/teams" method="post" class="registration-form">
+                    <input type="hidden" name="admin_email" value="<%= user.email %>"/>
+
+                    <div class="row">
+                        <div class=" col-sm-6">
+                            <div class="form-group">
+                                <label for="form-team-name">Team name</label>
+                                <input type="text" name="team_name" placeholder="Your Team name...."
+                                       class="form-team-name form-control" id="form-first-name" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="form-idea">Idea</label>
+                                <textarea name="idea"
+                                          placeholder="Please describe briefly your idea for the hackathon - leave blank if not decided yet"
+                                          class="form-idea form-control" id="form-idea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="form-team-isClosed">Are you looking for more team members?</label>
+                                <select name="isClosed" class="form-team-isClosed form-control"
+                                        id="isClosed">
+                                    <option value=false>Yes</option>
+                                    <option value=true>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="wrap-lookingText" class="form-group">
+                                <label for="form-lookingText">What are you looking for?</label>
+                                <textarea required name="lookingText"
+                                          placeholder="Please describe what kind of members you are looking for to join your team, e.g. Designers, Programmers and etc."
+                                          class="form-lookingText form-control"
+                                          id="form-lookingText"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="members">
+                        <button type="button" id="toggleAddMemberCollapse" data-toggle="collapse"
+                                data-target="#addMemberCollapse" class="btn btn-success btn-lg btn-block">Add Team
+                            Members
+                        </button>
+                        <div class="collapse" id="addMemberCollapse">
+                            <div class="card card-block">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="searchForTeamMembersCreateFormInput"
+                                                   placeholder="Search for registered user by email" data-maxUsers="<%= maxUsersInTeam %>">
+
+                                            <span class="input-group-btn"><button class="btn btn-secondary"
+                                                                                  id="addMemberToListBtnCreateForm"
+                                                                                  type="button"><i class="fa fa-plus"
+                                                                                                   aria-hidden="true"></i></button></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <ul id="memberListCreateForm" class="list-group">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="form-team-name">How many university computers do you
+                                                need?</label>
+                                            <select name="comp" class="form-team-isClosed form-control" id="comp">
+                                                <option value="0">None</option>
+                                                <% for(var i = 0; i < maxUsersInTeam; i++) { %>
+                                                <option value="<%= i + 1 %>"> <%= i + 1 %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="form-team-name">How many team members participated in a
+                                                Hackathon
+                                                before?</label>
+                                            <select name="exp" class="form-team-isClosed form-control" id="exp">
+                                                <option value="0">None</option>
+                                                <% for(var i = 0; i < maxUsersInTeam; i++) { %>
+                                                <option value="<%= i + 1 %>"> <%= i + 1 %></option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-xs-right mt-1">
+                        <button id="createTeamBtnCreateForm" type="submit" class="btn btn-primary btn-lg">Create Team</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<!--Modals-->
+<!--Modal Success-->
+<div class="modal fade" id="registerSuccessModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Success</h5>
+            </div>
+            <div class="modal-body">
+                <p>You've successfully create your team!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Model Success-->
+
+<!--Modal Fail-->
+<div class="modal fade" id="registerFailModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Houston, We have a problem</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalFailContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal Fail-->
+<% include ./partials/footer %>

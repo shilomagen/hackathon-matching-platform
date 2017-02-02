@@ -1,0 +1,213 @@
+<% include ./partials/header %>
+<div class="container mt-1">
+    <div class="form-bottom">
+        <form id="form-reg" role="form" action="/register" method="post" class="registration-form">
+            <div class="row">
+                <div class=" col-sm-6">
+                    <div class="form-group">
+                        <label for="form-first-name">First name</label>
+                        <input type="text" name="first_name" placeholder="First name"
+                               class="form-first-name form-control" id="form-first-name" required>
+                    </div>
+                </div>
+                <div class=" col-sm-6">
+                    <div class="form-group">
+                        <label for="form-last-name">Last name</label>
+                        <input type="text" name="last_name" placeholder="Last name"
+                               class="form-last-name form-control" id="form-last-name" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-email">Email</label>
+                        <input type="email" name="email" placeholder="Email"
+                               class="form-email form-control" id="form-email" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-phone-number">Phone Number</label>
+                        <input type="text" name="phone" placeholder="Phone number"
+                               class="form-phone-number form-control" id="form-phone-number"
+                               maxlength="15" pattern="\d*">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 selectContainer">
+                    <div class="form-group">
+                        <label for="form-insts">Academic Institute</label>
+                        <!--<input type="text" placeholder="Pick yours \ Insert if missing" class="form-control" list="insts" name="inst" id="form-insts" required/>-->
+                        <select id="form-insts" required name="inst" class="form-control select-p"
+                                required>
+                            <option value="mta">The Academic College Of Tel Aviv Yaffo</option>
+                            <option value="hit">Holon Institute of Technology</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-degs">Course of Study</label>
+                        <!--<input type="text" placeholder="Pick yours \ Insert if missing" class="form-control" list="degs" name="degree" id="form-degs" required/>-->
+                        <select id="form-degs" required name="degree" class="form-control select-p"
+                                required>
+                            <option value="cs">Computer Science</option>
+                            <option value="ism">Information Systems Management</option>
+                            <option value="eam">Economics and Management</option>
+                            <option value="bs">Behavioral Sciences</option>
+                            <option value="gas">Government and Society</option>
+                            <option value="ns">Nursing Sciences</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-degType">Degree Type</label>
+                        <!--<input type="text" placeholder="Pick yours \ Insert if missing" class="form-control" list="degs" name="degree" id="form-degs" required/>-->
+                        <select id="form-degType" required name="degreeType"
+                                class="form-control select-p" required>
+                            <option value="first">First Degree</option>
+                            <option value="master">Master</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 selectContainer">
+                    <div class="form-group">
+                        <label for="form-yearOfDeg">Year Of Degree</label>
+                        <!--<input type="text" placeholder="Pick yours \ Insert if missing" class="form-control" list="insts" name="inst" id="form-insts" required/>-->
+                        <select id="form-yearOfDeg" required name="yearOfDegree"
+                                class="form-control select-p" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-tshirt">Shirt Size</label>
+                        <select name="tshirt" id="form-tshirt" class="" required>
+                            <option value="large">L</option>
+                            <option value="xsmall">XS</option>
+                            <option value="small">S</option>
+                            <option value="medium">M</option>
+                            <option value="xlarge">XL</option>
+                            <option value="xxlarge">XXL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-food">Special Diet</label>
+                        <select name="food" id="form-food" class="" required>
+                            <option value="all">None</option>
+                            <option value="vegi">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-tshirt">Gender</label>
+                        <select name="gender" id="form-gender" class="" required>
+                            <option value="choose">Choose</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-pc">Need a PC?</label>
+                        <select name="needPC" id="form-pc" class="" required>
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-skills">Skills</label>
+                        <input class="form-control" data-role="tagsinput" type="text" id="form-skills"
+                               value="Java,JavaScript,PHP,NodeJS"
+                               placeholder="Add a tag"/>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-pass">Choose Password</label>
+                        <input type="password" name="password" placeholder="Choose Password..."
+                               class="form-pass form-control" id="form-pass" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-pass-ver">Repeat Password</label>
+                        <input type="password" name="form_pass_ver" placeholder="Repeat Password..."
+                               class="form-pass-ver form-control" id="form-pass-ver" required>
+                    </div>
+                </div>
+            </div>
+            <button id="reg_but" type="submit" class="btn btn-primary btn-lg float-xs-right">Sign me up!</button>
+        </form>
+    </div>
+</div>
+
+<!--Modals-->
+<!--Modal Success-->
+<div class="modal fade" id="registerSuccessModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Success</h5>
+            </div>
+            <div class="modal-body">
+                <p>You registered successfully! You will now be redirected to our Team registration platform.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Model Success-->
+
+<!--Modal Fail-->
+<div class="modal fade" id="registerFailModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Houston, We have a problem</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalFailContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal Fail-->
+<% include ./partials/footer %>

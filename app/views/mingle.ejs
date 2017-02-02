@@ -1,0 +1,72 @@
+<% include ./partials/header %>
+<% if (teams.length === 0) { %>
+<div class="container">
+    <h1 class="text-xs-center">Sorry, there is not teams at the moment.</h1>
+    <h1 class="text-xs-center mt-1">Come back later!</h1>
+</div>
+<% } else {
+    var isUserInTeam = user.team.length > 0;
+if (isUserInTeam) { %>
+<div class="container mt-1">
+    <h4 class="text-xs-center">You're currently in a team, You can't apply to another team.</h4>
+</div>
+<% } %>
+
+<div class="container">
+    <div class="card-deck-wrapper">
+        <% var lim = 0;
+        for (var i = 0; i < teams.length / 3; i++) { %>
+        <div class="card-deck mt-2 ">
+            <% if (teams.length - (i * 3) < 3) {
+                lim = teams.length - (i * 3);
+            } else {
+                lim = 3;
+            }
+            for (var j = 0; j < lim; j++) {
+                var currentTeam = teams[j + (i * 3)];
+                var isTeamClosed = currentTeam.isClosed; %>
+            <div class="card" data-id="<%= currentTeam._id %>">
+                <%
+                    var appliedTeams = user.appliedTeams || [];
+                    var userHasAppliedToTeam = appliedTeams.indexOf(currentTeam._id) !== -1;
+                %>
+                <div class="card-header text-xs-center"><%= currentTeam.team_name %></div>
+                <div class="card-block">
+                    <div class="group-idea">
+                        <span style="font-weight: bold">Idea: </span><span><%= currentTeam.idea %></span>
+                    </div>
+                    <div class="mt-1">
+                        <span style="font-weight: bold">What are we looking for? </span><span><%= currentTeam.lookingText %></span>
+                    </div>
+                    <div class="mt-1 text-xs-center">
+                        <button type="button"
+                                <% if (isTeamClosed || isUserInTeam || userHasAppliedToTeam){ %>
+                                disabled
+                                <% } %>class="applyTeamBtn btn btn-<% if (isTeamClosed) { %>danger<% } else if (userHasAppliedToTeam) { %>warning <%} else { %>primary<% } %>">
+                            <% if (userHasAppliedToTeam){%> Pending <% } else {%>
+                            Apply
+                            now
+                            <%}%>
+                        </button>
+                    </div>
+                    <p class="card-text mt-1">
+                        <small class="text-muted">Captain's Email Address: <%= currentTeam.admin_email %></small>
+                    </p>
+                </div>
+                <div class="card-footer text-xs-center <% if (currentTeam.isClosed) { %> not-looking <% } else { %> looking-for <% } %>">
+                    We're
+                    <% if (currentTeam.isClosed) { %>
+                    not
+                    <% } %>
+                    looking for team members!
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <%
+        } %>
+    </div>
+</div>
+<% } %>
+<% include ./partials/modals %>
+<% include ./partials/footer %>

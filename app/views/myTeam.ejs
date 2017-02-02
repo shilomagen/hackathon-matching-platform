@@ -1,0 +1,74 @@
+<% include ./partials/header %>
+<!-- Top content -->
+
+<div class="container mt-1 team-container">
+    <div class="row text-xs-center">
+        <h3><strong>Team </strong><%= team.team_name %> </h3>
+    </div>
+    <hr>
+    <div class="row text-xs-center">
+        <h4><strong>Idea</strong></h4>
+        <textarea class="form-control" id="" cols="15" rows="5" readonly ><%= team.idea %></textarea>
+    </div>
+    <div class="row text-xs-center">
+        <h4><strong>What are we looking for? </strong></h4>
+        <textarea class="form-control" id="" cols="15" rows="5" readonly ><%= team.lookingText %></textarea>
+    </div>
+    <div class="row text-xs-center">
+        <h5 class="mt-1">Team Members</h5>
+        <ul class="list-group myteam-members">
+            <li class="list-group-item active"><p class="myteam-captain"><%= team.admin_email %></p>
+                <small>Team's Captain</small>
+            </li>
+            <% if (team.members.length > 0) {
+                var teamArr = team.members;
+            teamArr.forEach(function(member){
+                console.log(member);
+            if (member !== team.admin_email){ %>
+            <li class="list-group-item"><%= member %></li>
+            <% }});} %>
+        </ul>
+    </div>
+    <div class="row text-xs-center mt-1">
+        <button type="button" id="myTeamLeaveBtn" class="btn btn-danger btn-lg">Leave Team</button>
+    </div>
+</div>
+
+<!--Modals-->
+<!--Modal Success-->
+<div class="modal fade" id="registerSuccessModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Success</h5>
+            </div>
+            <div class="modal-body">
+                <p>You've successfully left your team!. We are navigating you to mingle with another teams.</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Model Success-->
+
+<!--Modal Fail-->
+<div class="modal fade" id="registerFailModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Houston, We have a problem</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalFailContent">You can't leave team at this very moment due to a problem, please contact administrator ASAP.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal Fail-->
+<% include ./partials/footer %>

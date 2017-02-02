@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+</head>
+
+<body>
+<nav class="navbar navbar-light bg-faded">
+    <a class="navbar-brand" href="#"><%= eventname %> Registered Users</a>
+    <ul class="nav navbar-nav float-xs-right">
+        <li class="nav-item active"><a class="nav-link" href="/printUsers">Users <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/adminspace">Adminspace</a></li>
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+    </ul>
+</nav>
+
+<!-- Top content -->
+<div class="container">
+    <div class="row mt-1">
+        <div class="input-group input-group-lg">
+            <input id="searchInput" type="text" class="form-control" placeholder="Search..."
+                   aria-describedby="sizing-addon1">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-1">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Degree</th>
+            <th>Shirt Size</th>
+            <th>Diet</th>
+            <th>Skills</th>
+            <th>Accepted</th>
+            <th>In Team</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody id="fbody">
+        <% for(var i = 0; i < users.length; i++) { %>
+        <tr>
+            <td><span>
+                                <%= i + 1 %>
+                            </span></td>
+            <td class="text-capitalize"><%= users[i].first_name + " " + users[i].last_name %></td>
+            <td><span id="email"><%= users[i].email %></span></td>
+            <td><span class="phone"><%= users[i].phone %></span></td>
+            <td><span class="deg"><%= users[i].degree %></span></td>
+            <td><span class="size"><%= users[i].tshirt %></span></td>
+            <td><span class="food"><%= users[i].food %></span></td>
+            <td>
+                <% if (users[i].tags) {
+                %>
+                <select name="skills" class="skills">
+                    <% Object.keys(users[i].tags).forEach(function(key){
+                    %>
+                    <option class="text-capitalize"><%= users[i].tags[key] %> </option>
+                    <%
+                    }) %>
+                </select>
+                <% } else { %>
+                <span>No Skills</span>
+                <%
+                } %>
+            </td>
+            <td><input id="<%= users[i]._id %>" type="checkbox" name="isAccepted"
+                        <% if (users[i].accepted) { %>
+                       checked
+                        <% } %>
+                />
+            </td>
+            <td><input data-uid="<%= users[i]._id %>" type="checkbox" name="isMember"
+                        <% if (users[i].isMember) { %>
+                       checked
+                        <% } %>
+                />
+            </td>
+
+            <td><select data-uid="<%= users[i]._id %>" name="role" class="role">
+                    <% Object.keys(roles).forEach(function(key){ %>
+                    <option value="<%= key %>"
+                            <% if (users[i].role === roles[key]){ %>
+                            selected
+                            <% } %>
+                    >
+                        <%= key %>
+
+                    </option>
+                    <% }) %>
+                </select></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+        integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js"
+        integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"
+        integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK"
+        crossorigin="anonymous"></script>
+<script src="assets/js/scripts.js"></script>
+<script src="assets/js/admin.js"></script>
+
+
+</body>
+
+</html>
+
