@@ -243,7 +243,7 @@ $(function() {
 
 		$.ajax({
 			method: 'POST',
-			url: '/tessams/' + teamID + '/apply',
+			url: '/teams/' + teamID + '/apply',
 			success: function() {
 				location.reload();
 			},
