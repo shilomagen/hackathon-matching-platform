@@ -1,6 +1,6 @@
 var eventname = 'MTA Hack 2017';
 var eventMediaLinks = {
-	website: 'http://www.mtahack.com',
+	website: 'http://ec2-54-213-35-187.us-west-2.compute.amazonaws.com/',
 	facebook: 'https://www.facebook.com/mtahack2017',
 	twitter: 'https://twitter.com/mtahackathon',
 	google: 'https://plus.google.com/u/1/113260219787307001341/'
