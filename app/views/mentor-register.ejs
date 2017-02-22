@@ -1,0 +1,186 @@
+<% include ./partials/header %>
+<div class="container mt-1">
+    <div class="form-bottom">
+        <form id="form-reg-mentor" role="form" action="/register" method="post" class="registration-form">
+            <div class="row">
+                <div class=" col-sm-6">
+                    <div class="form-group">
+                        <label for="form-first-name">First name</label>
+                        <input type="text" name="first_name" placeholder="First name"
+                               class="form-first-name form-control" id="form-first-name" required>
+                    </div>
+                </div>
+                <div class=" col-sm-6">
+                    <div class="form-group">
+                        <label for="form-last-name">Last name</label>
+                        <input type="text" name="last_name" placeholder="Last name"
+                               class="form-last-name form-control" id="form-last-name" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-email">Email</label>
+                        <input type="email" name="email" placeholder="Email"
+                               class="form-email form-control" id="form-email" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-phone-number">Phone Number (Your real phone number)</label>
+                        <input type="text" name="phone" placeholder="Phone number" required
+                               class="form-phone-number form-control" id="form-phone-number"
+                               maxlength="15" pattern="\d*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-tshirt">Shirt Size</label>
+                        <select name="tshirt" id="form-tshirt" class="" required>
+                            <option value="large">L</option>
+                            <option value="xsmall">XS</option>
+                            <option value="small">S</option>
+                            <option value="medium">M</option>
+                            <option value="xlarge">XL</option>
+                            <option value="xxlarge">XXL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-food">Special Diet</label>
+                        <select name="food" id="form-food" class="" required>
+                            <option value="all">None</option>
+                            <option value="vegi">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-tshirt">Gender</label>
+                        <select name="gender" id="form-gender" class="" required>
+                            <option value="choose">Choose</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-skills">Skills</label>
+                        <div>
+                            <select data-placeholder="Choose expertise" style="width: 950px; display: none;"
+                                    multiple="" class="chosen-select form-control" tabindex="-1">
+                                <option value=""></option>
+                                <option>C</option>
+                                <option>C++</option>
+                                <option>JavaScript</option>
+                                <option>NodeJS</option>
+                                <option>Python</option>
+                                <option>Django</option>
+                                <option>Ruby</option>
+                                <option>Ruby On Rails</option>
+                                <option>C#</option>
+                                <option>.NET</option>
+                                <option>Meteor</option>
+                                <option>React</option>
+                                <option>Cordova</option>
+                                <option>Ember</option>
+                                <option>Backbone</option>
+                                <option>Apache</option>
+                                <option>TypeScript</option>
+                                <option>PHP</option>
+                                <option>CSS</option>
+                                <option>HTML</option>
+                                <option>Go</option>
+                                <option>WPF</option>
+                                <option>Java</option>
+                                <option>Ionic</option>
+                                <option>AngularJS</option>
+                                <option>Swift</option>
+                                <option >PhoneGap</option>
+                                <option disabled>------ Databases ------</option>
+                                <option>MySQL</option>
+                                <option>SQLite</option>
+                                <option>MongoDB</option>
+                                <option>Couchebase</option>
+                                <option>Redis</option>
+                                <option>PostgreSQL</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-pass">Choose Password</label>
+                        <input type="password" name="password" placeholder="Choose Password..."
+                               class="form-pass form-control" id="form-pass" required>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="form-pass-ver">Repeat Password</label>
+                        <input type="password" name="form_pass_ver" placeholder="Repeat Password..."
+                               class="form-pass-ver form-control" id="form-pass-ver" required>
+                    </div>
+                </div>
+            </div>
+            <button id="reg_but" type="submit" class="btn btn-primary btn-lg float-xs-right">Sign me up!</button>
+        </form>
+    </div>
+</div>
+
+<!--Modals-->
+<!--Modal Success-->
+<div class="modal fade" id="registerSuccessModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Success</h5>
+            </div>
+            <div class="modal-body">
+                <p>You registered successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Model Success-->
+
+<!--Modal Fail-->
+<div class="modal fade" id="registerFailModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-xs-center">Houston, We have a problem</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalFailContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Modal Fail-->
+<% include ./partials/footer %>

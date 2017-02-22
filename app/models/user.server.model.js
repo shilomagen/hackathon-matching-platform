@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
 var ROLES = {
 	SuperAdmin: 'superAdmin',
 	Admin: 'admin',
-	Student: 'student'
+	Student: 'student',
+	Mentor: 'mentor'
 };
 
 var ERROR_TYPE = {

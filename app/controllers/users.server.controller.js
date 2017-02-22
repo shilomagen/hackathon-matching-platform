@@ -88,6 +88,64 @@ var getErrorMessage = function(err) {
 	return message;
 };
 
+exports.handleAuthtCustomCB = function handleAuthtCustomCB(req, res, next) {
+	passport.authenticate('local', function(err, user, info) {
+		var redirectRoute = '';
+		if (err) {
+			return next(err);
+		}
+		if (!user) {
+			if (info) {
+				req.flash('error', info.message);
+			} else {
+				req.flash('error', "An error has occured, please try later.")
+			}
+			return res.redirect('/login');
+		}
+		req.logIn(user, function(err) {
+			if (err) {
+				return next(err);
+			}
+
+			if (user.role === ROLES.Student) {
+				redirectRoute = '/team-up';
+			} else if (user.role === ROLES.Mentor) {
+				redirectRoute = '/mentor-up'
+			} else if ((user.role === ROLES.Admin) || (user.role === ROLES.SuperAdmin)) {
+				redirectRoute = '/adminspace';
+			} else {
+				redirectRoute = '/';
+			}
+
+			return res.redirect(redirectRoute);
+
+		});
+	})(req, res, next);
+};
+exports.isMentor = function isMentor(req, res, next) {
+	if ((req.user) && (req.user.role === ROLES.Mentor)) {
+		next();
+	} else {
+		res.redirect('/');
+	}
+
+
+};
+exports.renderMentorUp = function renderMentorUp(req, res) {
+	if (req.user) {
+		res.render('mentor-up', {
+			user: req.user,
+			pageTitle: 'Mentor Zone',
+			menu: [
+				{name: 'Home', path: '/', isActive: true},
+				{name: 'Logout', path: '/logout', isActive: false}
+			],
+			eventName: config.eventname,
+			footerData: config.eventMediaLinks
+		})
+	}
+
+};
 exports.renderLogin = function(req, res, next) {
 	if (!req.user) {
 		res.render('index', {
@@ -96,7 +154,7 @@ exports.renderLogin = function(req, res, next) {
 			menu: [{name: 'Home', path: '/', isActive: true}],
 			messages: req.flash('error'),
 			eventName: config.eventname,
-			footerData:config.eventMediaLinks
+			footerData: config.eventMediaLinks
 		});
 	}
 	else {
@@ -126,7 +184,7 @@ exports.renderRegister = function(req, res, next) {
 				}],
 			messages: req.flash('error'),
 			eventName: config.eventname,
-			footerData:config.eventMediaLinks
+			footerData: config.eventMediaLinks
 		});
 	}
 	else {
@@ -134,21 +192,37 @@ exports.renderRegister = function(req, res, next) {
 	}
 };
 
-// exports.renderForgot = function(req, res, next) {
-// 	if (!req.user) {
-// 		res.render('forgot', {
-// 			title: 'Forgot form',
-// 			messages: req.flash('error'),
-// 			suppemail: config.supportEmailAddr,
-// 			eventname: config.eventname,
-// 			eventwebsite: config.eventwebsite,
-// 			eventfacebook: config.eventfacebook
-// 		});
-// 	}
-// 	else {
-// 		return res.redirect('/team-up');
-// 	}
-// };
+exports.renderMentorRegistration = function(req, res) {
+	if (!req.user) {
+		res.render('mentor-register', {
+			user: '',
+			pageTitle: 'Mentors Registration',
+			menu: [
+				{
+					name: 'Home',
+					path: '/',
+					isActive: false
+				},
+				{
+					name: 'Register',
+					path: '/mentor-register',
+					isActive: true
+				}, {
+					name: 'Login',
+					path: '/login',
+					isActive: false
+				}],
+			messages: req.flash('error'),
+			eventName: config.eventname,
+			footerData: config.eventMediaLinks
+		});
+	}
+	else {
+		return res.redirect('/team-up');
+	}
+
+};
+
 
 exports.renderPrintUsers = function(req, res, next) {
 	//if (!req.user) {
@@ -166,7 +240,7 @@ exports.renderPrintUsers = function(req, res, next) {
 				eventwebsite: config.eventwebsite,
 				eventfacebook: config.eventfacebook,
 				roles: ROLES,
-				footerData:config.eventMediaLinks
+				footerData: config.eventMediaLinks
 			});
 		}
 	});
@@ -205,7 +279,7 @@ exports.renderAdminspace = function(req, res, next) {
 					usersCount: users.length,
 					approvedUsers: howManyUsersApproved(users),
 					teamCount: teamCount,
-					footerData:config.eventMediaLinks
+					footerData: config.eventMediaLinks
 				});
 			});
 
@@ -270,7 +344,7 @@ exports.renderResetme = function(req, res, next) {
 							{
 								pageTitle: 'Reset Password',
 								msg: 'error',
-								user:{},
+								user: {},
 								menu: [
 									{
 										name: 'Home',
@@ -284,14 +358,14 @@ exports.renderResetme = function(req, res, next) {
 									}],
 								messages: req.flash('error'),
 								eventName: config.eventname,
-								footerData:config.eventMediaLinks
+								footerData: config.eventMediaLinks
 							});
 					}
 					else if (!user) {
 						res.render('resetme', {
 							pageTitle: 'Reset Password',
 							msg: 'nouser',
-							user:{},
+							user: {},
 							menu: [
 								{
 									name: 'Home',
@@ -305,7 +379,7 @@ exports.renderResetme = function(req, res, next) {
 								}],
 							messages: req.flash('error'),
 							eventName: config.eventname,
-							footerData:config.eventMediaLinks
+							footerData: config.eventMediaLinks
 						});
 					} else {
 						res.render('resetme', {
@@ -325,7 +399,7 @@ exports.renderResetme = function(req, res, next) {
 								}],
 							messages: req.flash('error'),
 							eventName: config.eventname,
-							footerData:config.eventMediaLinks
+							footerData: config.eventMediaLinks
 						});
 					}
 				}
@@ -348,7 +422,7 @@ exports.renderResetme = function(req, res, next) {
 					}],
 				messages: req.flash('error'),
 				eventName: config.eventname,
-				footerData:config.eventMediaLinks
+				footerData: config.eventMediaLinks
 			});
 		}
 	}
@@ -425,7 +499,7 @@ exports.register = function(req, res, next) {
 			} else {
 				var subject = config.eventname + ' Registration';
 				var body = "Hi " + user.first_name + " " + user.last_name + "\nYou have successfully registered to "
-					+ config.eventname + ".\nPlease user your email and password to login to our team creation " +
+					+ config.eventname + ".\nPlease use your email and password to login to our team creation " +
 					"platform and create or join a team.\n"
 					+ config.eventwebsite + "/login\n\n" + config.eventname + " Team";
 				sendGeneralEmail(user.email, subject, body);
@@ -435,6 +509,34 @@ exports.register = function(req, res, next) {
 	}
 	else {
 		return res.redirect('/');
+	}
+};
+
+
+exports.mentorRegistration = function(req, res) {
+	if (!req.user) {
+		var user = new User(req.body);
+		user.role = 'mentor';
+		user.provider = 'local';
+		user.save(function(err) {
+			if (err) {
+				console.log(err);
+				var message = getErrorMessage(err);
+				req.flash('error', message);
+				if (err.code === 11000) {
+					return res.status(409).json(err.code);
+				} else {
+					return res.status(500).json(err.code);
+				}
+			} else {
+				var subject = config.eventname + ' Registration';
+				var body = "Hi " + user.first_name + " " + user.last_name + "\nYou have successfully registered to "
+					+ config.eventname + " as a Mentor!.\nPlease use your email and password to login to the MTA Hack realtime application during the hackathon \n"
+					+ config.eventwebsite + "/login\n\n" + config.eventname + " Team";
+				sendGeneralEmail(user.email, subject, body);
+				res.send("ok")
+			}
+		});
 	}
 };
 

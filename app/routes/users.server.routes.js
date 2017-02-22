@@ -1,6 +1,7 @@
 var users = require('../../app/controllers/users.server.controller'),
 	params = require('../../app/controllers/params.server.controller'),
-	passport = require('passport');
+	passport = require('passport'),
+	flash = require('connect-flash');
 
 module.exports = function(app) {
 	app.route('/users')
@@ -21,6 +22,9 @@ module.exports = function(app) {
 	app.route('/register')
 		.get(params.isRegistrationOpen, users.renderRegister)
 		.post(params.isRegistrationOpen, users.register);
+	app.route('/mentor-register')
+		.get(users.renderMentorRegistration)
+		.post(users.mentorRegistration);
 
 	app.route('/user/leaveTeam').delete(users.logedIn, users.leaveTeam);
 	app.route('/forgot').post(params.isRegistrationOpen, users.forgot);
@@ -31,11 +35,9 @@ module.exports = function(app) {
 
 	app.route('/login')
 		.get(users.renderLogin)
-		.post(passport.authenticate('local', {
-			successRedirect: '/team-up',
-			failureRedirect: '/login',
-			failureFlash: true
-		}));
+		.post(users.handleAuthtCustomCB);
+	app.route('/mentor-up')
+		.get(users.logedIn, users.isMentor, users.renderMentorUp);
 	app.route('/search_member')
 		.get(users.logedIn, users.searchUserByEmailAutocomplete);
 
