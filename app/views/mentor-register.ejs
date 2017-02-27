@@ -1,7 +1,7 @@
 <% include ./partials/header %>
 <div class="container mt-1">
     <div class="form-bottom">
-        <form id="form-reg-mentor" role="form" action="/register" method="post" class="registration-form">
+        <form id="form-reg-mentor" role="form" action="/mentor-register" method="post" class="registration-form">
             <div class="row">
                 <div class=" col-sm-6">
                     <div class="form-group">
@@ -109,7 +109,7 @@
                                 <option>Ionic</option>
                                 <option>AngularJS</option>
                                 <option>Swift</option>
-                                <option >PhoneGap</option>
+                                <option>PhoneGap</option>
                                 <option disabled>------ Databases ------</option>
                                 <option>MySQL</option>
                                 <option>SQLite</option>
@@ -119,11 +119,15 @@
                                 <option>PostgreSQL</option>
                             </select>
                         </div>
-
-
                     </div>
                 </div>
-
+                <div class=" col-sm-6">
+                    <div class="form-group">
+                        <label for="form-company">Company</label>
+                        <input type="text" name="mentor_company" placeholder="Company"
+                               class="form-company form-control" id="form-company" required>
+                    </div>
+                </div>
             </div>
 
             <div class="row">

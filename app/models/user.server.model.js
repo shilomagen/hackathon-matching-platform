@@ -49,6 +49,7 @@ var UserSchema = new Schema({
 		type: String,
 		default: ROLES.Student
 	},
+	mentor_company: String,
 	appliedTeams: []
 });
 
