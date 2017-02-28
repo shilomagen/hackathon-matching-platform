@@ -5,7 +5,8 @@ var User = require('mongoose').model('User'),
 	nodemailer = require('nodemailer'),
 	config = require('../../config/config'),
 	ROLES = require('./../models/user.server.model').ROLES,
-	Q = require('q');
+	Q = require('q'),
+	xml = require('xml');
 
 
 //Init the SMTP transport
@@ -144,7 +145,6 @@ exports.renderMentorUp = function renderMentorUp(req, res) {
 			footerData: config.eventMediaLinks
 		})
 	}
-
 };
 exports.renderLogin = function(req, res, next) {
 	if (!req.user) {
@@ -824,6 +824,131 @@ exports.leaveTeam = function(req, res) {
 	}
 };
 
+// exports.renderSmsSender = function(req, res) {
+// 	User.find({}, function(err, users) {
+// 		if (err) {
+// 			return next(err);
+// 		} else {
+// 			Team.count({}, function(err, teamCount) {
+// 				res.render('adminspace/sms', {
+// 					eventName: config.eventname,
+// 					pageTitle: 'SMS Sender',
+// 					menu: [
+// 						{
+// 							name: 'Home',
+// 							path: '/',
+// 							isActive: false
+// 						},
+// 						{
+// 							name: 'Adminspace',
+// 							path: '/adminspace',
+// 							isActive: true
+// 						},
+// 						{
+// 							name: 'Logout',
+// 							path: '/logout',
+// 							isActive: false
+// 						}
+// 					],
+// 					usersCount: users.length,
+// 					approvedUsers: howManyUsersApproved(users),
+// 					teamCount: teamCount,
+// 					footerData: config.eventMediaLinks
+// 				});
+// 			});
+//
+// 		}
+// 	});
+// };
+
+// exports.sendSMSTest = function(req, res) {
+// 	var contacts = [
+// 		{
+// 			name: 'שילה',
+// 			phone: '+972544412112'
+// 		},
+// 		{
+// 			name: 'לאבי',
+// 			phone: '0525740009'
+// 		}
+// 	];
+// 	var accountSID ='AC8cc44449556173df7b6e4885e9b84a19',
+// 		accountToken = '71e5474d1cdc5cbe705facb6935b91e9',
+// 		myNumber='+972524880947';
+// 	var smsTest = require('twilio')(accountSID, accountToken);
+// 	contacts.forEach(function(contact){
+// 		smsTest.messages.create({
+// 			body: contact.name + "מה קורה",
+// 			to: contact.phone,
+// 			from: myNumber
+// 		}, function(err, data) {
+// 			if (err) {
+// 				console.error('Could not notify administrator');
+// 				console.error(err);
+// 			} else {
+// 				console.log(data);
+// 				console.log('Administrator notified');
+// 			}
+// 		});
+// 	});
+// 	res.send("Was Sent");
+// };
+var getUserByPhoneNumber = function getUserByPhoneNumber(phoneNumber, body) {
+	var deferred = Q.defer();
+	User.find({'phone': new RegExp(phoneNumber, 'i')}, function(err, user) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			if (!user) {
+				deferred.reject("NoUser");
+			} else {
+				deferred.resolve({user: user, smsBody: body});
+			}
+		}
+
+	});
+	return deferred.promise;
+};
+
+var insertResponseToDB = function insertResponseToDB(obj) {
+	var user = obj.user,
+		smsBody = obj.smsBody,
+		deferred = Q.defer();
+	user.smsResponse = smsBody;
+	user.save(function(err) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(true);
+		}
+	});
+	return deferred.promise;
+};
+
+exports.getSMSFromClient = function getSMSFromClient(req, res) {
+	var from = req.From.substring(4); //Remove +972 at the beginning
+	getUserByPhoneNumber(from, req.Body)
+		.then(insertResponseToDB)
+		.then(function() {
+			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
+			res.set('Content-Type', 'text/xml');
+			res.send(xmlResponse);
+			var subject = "SMS Response from " + req.From;
+			var body = "RESPONSE: " + req.Body;
+			sendGeneralEmail(config.emailAddr, subject, body);
+		})
+		.catch(function(err) {
+			console.error(err);
+			var subject = "SMS Response from " + req.From;
+			var body = "RESPONSE: " + req.Body;
+			sendGeneralEmail(config.emailAddr, subject, body);
+			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
+			res.set('Content-Type', 'text/xml');
+			res.send(xmlResponse);
+		})
+		.done();
+
+};
 
 
 

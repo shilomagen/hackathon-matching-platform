@@ -50,7 +50,8 @@ var UserSchema = new Schema({
 		default: ROLES.Student
 	},
 	mentor_company: String,
-	appliedTeams: []
+	appliedTeams: [],
+	smsResponse: String
 });
 
 UserSchema.static('findByEmail', function(email, callback) {

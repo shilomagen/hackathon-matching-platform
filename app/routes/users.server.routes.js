@@ -32,7 +32,8 @@ module.exports = function(app) {
 	app.route('/resetme/:resetId').get(params.isRegistrationOpen, users.renderResetme);
 	app.route('/printUsers').get(users.isUserAdminRole, users.renderPrintUsers);
 	app.route('/adminspace').get(users.isUserAdminRole, users.renderAdminspace);
-
+	// app.route('/adminspace/sms-sender').get(users.isUserAdminRole, users.sendSMSTest);
+	app.route('/observ-sms').post(users.getSMSFromClient);
 	app.route('/login')
 		.get(users.renderLogin)
 		.post(users.handleAuthtCustomCB);
