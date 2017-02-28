@@ -926,21 +926,21 @@ var insertResponseToDB = function insertResponseToDB(obj) {
 };
 
 exports.getSMSFromClient = function getSMSFromClient(req, res) {
-	var from = req.From.substring(4); //Remove +972 at the beginning
-	getUserByPhoneNumber(from, req.Body)
+	var from = req.body.From.substring(4); //Remove +972 at the beginning
+	getUserByPhoneNumber(from, req.body.Body)
 		.then(insertResponseToDB)
 		.then(function() {
 			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
 			res.set('Content-Type', 'text/xml');
 			res.send(xmlResponse);
-			var subject = "SMS Response from " + req.From;
-			var body = "RESPONSE: " + req.Body;
+			var subject = "SMS Response from " + req.body.From;
+			var body = "RESPONSE: " + req.body.Body;
 			sendGeneralEmail(config.emailAddr, subject, body);
 		})
 		.catch(function(err) {
 			console.error(err);
-			var subject = "SMS Response from " + req.From;
-			var body = "RESPONSE: " + req.Body;
+			var subject = "SMS Response from " + req.body.From;
+			var body = "RESPONSE: " + req.body.Body;
 			sendGeneralEmail(config.emailAddr, subject, body);
 			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
 			res.set('Content-Type', 'text/xml');
