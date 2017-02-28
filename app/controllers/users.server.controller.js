@@ -915,6 +915,9 @@ var insertResponseToDB = function insertResponseToDB(obj) {
 		smsBody = obj.smsBody,
 		deferred = Q.defer();
 	user.smsResponse = smsBody;
+	if (user instanceof Array) {
+		user = user[0];
+	}
 	user.save(function(err) {
 		if (err) {
 			deferred.reject(err);
