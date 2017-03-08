@@ -8,18 +8,28 @@ var gulp = require('gulp'),
 	concatCSS = require('gulp-concat-css'),
 	cleanCSS = require('gulp-clean-css');
 
-var jsFiles = 'public/assets/js/**/*.js',
+var jsFiles = 'public/assets/js/*.js',
 	jsDest = 'public/dist/scripts',
 	cssFiles = 'public/assets/css/*.css',
-	cssDest = 'public/dist/styles';
+	cssDest = 'public/dist/styles',
+	jsAdminFiles = 'public/assets/js/admin/*.js';
 
-gulp.task('default', ['scripts', 'styles']);
+gulp.task('default', ['watch']);
 
 gulp.task('scripts', function() {
 	return gulp.src(jsFiles)
 		.pipe(concat('scripts.js'))
 		.pipe(gulp.dest(jsDest))
 		.pipe(rename('scripts.min.js'))
+		.pipe(uglify())
+		.pipe(gulp.dest(jsDest));
+});
+
+gulp.task('admin-scripts', function() {
+	return gulp.src(jsAdminFiles)
+		.pipe(concat('admin-scripts.js'))
+		.pipe(gulp.dest(jsDest))
+		.pipe(rename('admin-scripts.min.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest(jsDest));
 });
@@ -31,4 +41,10 @@ gulp.task('styles', function() {
 		.pipe(rename('bundle.min.css'))
 		.pipe(cleanCSS({compatibility: 'ie8'}))
 		.pipe(gulp.dest(cssDest));
+});
+
+gulp.task('watch', function() {
+	gulp.watch(jsFiles, ['scripts']);
+	gulp.watch(jsAdminFiles, ['admin-scripts']);
+	gulp.watch(cssFiles, ['styles']);
 });

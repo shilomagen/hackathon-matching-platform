@@ -8,8 +8,8 @@
                     <div class="card-block">
                         <i class="fa fa-user-circle fa-5x" style="color: RGBA(135, 181, 0, 1.00)"
                            aria-hidden="true"></i>
-                        <h2 class="text-capitalize mt-1"><%= usersCount %> users</h2>
-                        <a href="/printUsers" class="btn btn-primary text-capitalize">users list</a>
+                        <h2 class="text-capitalize mt-1"><%= usersMap.students %> users</h2>
+                        <a href="/print-users" class="btn btn-primary text-capitalize">users list</a>
                     </div>
                 </div>
                 <div class="card text-xs-center">
@@ -17,7 +17,7 @@
                     <div class="card-block ">
                         <i class="fa  fa-user-plus fa-5x" style="color: RGBA(14, 139, 209, 1.00)"
                            aria-hidden="true"></i>
-                        <h2 class="text-capitalize mt-1"><%= approvedUsers %> approved users</h2>
+                        <h2 class="text-capitalize mt-1"><%= usersMap.approvedUsers %> approved users</h2>
                     </div>
                 </div>
                 <div class="card text-xs-center">
@@ -35,8 +35,8 @@
                     <div class="card-header text-capitalize">Mentors</div>
                     <div class="card-block ">
                         <i class="fa  fa-user-md fa-5x" style="color: RGBA(135, 181, 0, 1.00)" aria-hidden="true"></i>
-                        <h2 class="text-capitalize mt-1">Mentors</h2>
-                        <a href="/" class="btn btn-primary text-capitalize">Manage Mentors</a>
+                        <h2 class="text-capitalize mt-1"><%= usersMap.mentors %> Mentors</h2>
+                        <a href="/print-mentors" class="btn btn-primary text-capitalize">Manage Mentors</a>
                     </div>
                 </div>
                 <div class="card text-xs-center">

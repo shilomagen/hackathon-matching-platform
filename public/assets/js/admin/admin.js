@@ -10,7 +10,7 @@ $(".role").change(function() {
 		data: {role: $(this).find('option:selected').text().trim().toLowerCase()},
 		success: function(data) {
 			if (data.status === 'ok') {
-				alert("user changed");
+				alert("user changed!!");
 			} else {
 				alert("cant update user");
 			}

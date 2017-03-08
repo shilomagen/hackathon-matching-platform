@@ -1,0 +1,48 @@
+<% include ./partials/header-admin %>
+<div class="container-fluid mt-1">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Shirt Size</th>
+            <th>Diet</th>
+            <th>Skills</th>
+            <th>Company</th>
+        </tr>
+        </thead>
+        <tbody id="fbody">
+        <% for(var i = 0; i < users.length; i++) { %>
+        <tr>
+            <td><span>
+                                <%= i + 1 %>
+                            </span></td>
+            <td class="text-capitalize"><%= users[i].first_name + " " + users[i].last_name %></td>
+            <td><span id="email"><%= users[i].email %></span></td>
+            <td><span class="phone"><%= users[i].phone %></span></td>
+            <td><span class="size"><%= users[i].tshirt %></span></td>
+            <td><span class="food"><%= users[i].food %></span></td>
+            <td>
+                <% if (users[i].tags) {
+                %>
+                <select name="skills" class="skills">
+                    <% Object.keys(users[i].tags).forEach(function(key){
+                    %>
+                    <option class="text-capitalize"><%= users[i].tags[key] %> </option>
+                    <%
+                    }) %>
+                </select>
+                <% } else { %>
+                <span>No Skills</span>
+                <%
+                } %>
+            </td>
+            <td><span class="food"><%= users[i].mentor_company %></span></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+<% include ./partials/footer-admin %>

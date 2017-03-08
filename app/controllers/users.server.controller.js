@@ -22,6 +22,7 @@ var smtpConfig = {
 		rejectUnauthorized: false
 	}
 };
+
 var transporter = nodemailer.createTransport(smtpConfig);
 
 function sendContactUsEmail(body) {
@@ -146,6 +147,7 @@ exports.renderMentorUp = function renderMentorUp(req, res) {
 		})
 	}
 };
+
 exports.renderLogin = function(req, res, next) {
 	if (!req.user) {
 		res.render('index', {
@@ -226,27 +228,78 @@ exports.renderMentorRegistration = function(req, res) {
 
 exports.renderPrintUsers = function(req, res, next) {
 	//if (!req.user) {
-	User.find({}, function(err, users) {
+	User.find({'role': ROLES.Student}, function(err, users) {
 		if (err) {
 			return next(err);
 		}
 		else {
-			res.render('showUsers', {
-				title: 'Show Users Panel',
+			res.render('adminspace/show-users', {
+				title: 'Users',
 				users: users,
+				menu: [
+					{
+						name: 'Home',
+						path: '/',
+						isActive: false
+					},
+					{
+						name: 'Adminspace',
+						path: '/adminspace',
+						isActive: true
+					},
+					{
+						name: 'Logout',
+						path: '/logout',
+						isActive: false
+					}
+				],
 				messages: req.flash('error'),
 				suppemail: config.supportEmailAddr,
+				pageTitle: 'Adminspace',
 				eventname: config.eventname,
 				eventwebsite: config.eventwebsite,
 				eventfacebook: config.eventfacebook,
-				roles: ROLES,
 				footerData: config.eventMediaLinks
 			});
 		}
 	});
-	//} else {
-	//	return res.redirect('/');
-	//}
+};
+
+exports.renderPrintMentors = function(req, res, next) {
+	User.find({'role': ROLES.Mentor}, function(err, mentors) {
+		if (err) {
+			next(err);
+		} else {
+			res.render('adminspace/show-mentor', {
+				title: 'Users',
+				users: mentors,
+				menu: [
+					{
+						name: 'Home',
+						path: '/',
+						isActive: false
+					},
+					{
+						name: 'Adminspace',
+						path: '/adminspace',
+						isActive: true
+					},
+					{
+						name: 'Logout',
+						path: '/logout',
+						isActive: false
+					}
+				],
+				messages: req.flash('error'),
+				suppemail: config.supportEmailAddr,
+				pageTitle: 'Adminspace',
+				eventname: config.eventname,
+				eventwebsite: config.eventwebsite,
+				eventfacebook: config.eventfacebook,
+				footerData: config.eventMediaLinks
+			});
+		}
+	})
 };
 
 exports.renderAdminspace = function(req, res, next) {
@@ -256,6 +309,7 @@ exports.renderAdminspace = function(req, res, next) {
 			return next(err);
 		} else {
 			Team.count({}, function(err, teamCount) {
+				var usersMap = mapUsers(users);
 				res.render('adminspace', {
 					eventName: config.eventname,
 					pageTitle: 'Adminspace',
@@ -276,8 +330,7 @@ exports.renderAdminspace = function(req, res, next) {
 							isActive: false
 						}
 					],
-					usersCount: users.length,
-					approvedUsers: howManyUsersApproved(users),
+					usersMap: usersMap,
 					teamCount: teamCount,
 					footerData: config.eventMediaLinks
 				});
@@ -287,14 +340,30 @@ exports.renderAdminspace = function(req, res, next) {
 	});
 };
 
-var howManyUsersApproved = function(usersArr) {
-	var counter = 0;
-	usersArr.forEach(function(user) {
-		if (user.accepted) {
-			counter++;
-		}
-	});
-	return counter;
+//@T@
+var mapUsers = function mapUsers(users) {
+	var studentsCount = 0,
+		mentorsCount = 0,
+		approvedUsersCount = 0;
+	if (users instanceof Array && users.length > 0) {
+		users.forEach(function(user) {
+			if (user.role === ROLES.Student) {
+				studentsCount++;
+				if (user.accepted) {
+					approvedUsersCount++;
+				}
+			} else if (user.role === ROLES.Mentor) {
+				mentorsCount++;
+			}
+		})
+	}
+	return {
+		students: studentsCount,
+		mentors: mentorsCount,
+		approvedUsers: approvedUsersCount
+	}
+
+
 };
 
 exports.renderParams = function(req, res, next) {
@@ -432,7 +501,7 @@ exports.renderResetme = function(req, res, next) {
 };
 
 exports.passer = function(req, res, next) {
-	console.log(req.body)
+	console.log(req.body);
 	if (!req.body.email || req.body.email === "" || !req.body.resetPass || req.body.resetPass.length == 0) {
 		res.send("you did something wrong. try again or contact " + config.emailAddr)
 	}
@@ -486,6 +555,7 @@ exports.register = function(req, res, next) {
 		var user = new User(req.body);
 		var message = null;
 		user.provider = 'local';
+		user.role = ROLES.Student;
 		user.save(function(err) {
 			if (err) {
 				console.log(err);
@@ -862,36 +932,32 @@ exports.leaveTeam = function(req, res) {
 // };
 
 // exports.sendSMSTest = function(req, res) {
-// 	var contacts = [
-// 		{
-// 			name: 'שילה',
-// 			phone: '+972544412112'
-// 		},
-// 		{
-// 			name: 'לאבי',
-// 			phone: '0525740009'
+// 	User.find({'role': 'student'}, function(err, users) {
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			var accountSID = 'AC8cc44449556173df7b6e4885e9b84a19',
+// 				accountToken = '71e5474d1cdc5cbe705facb6935b91e9',
+// 				myNumber = '+972524880947';
+// 			var smsTest = require('twilio')(accountSID, accountToken);
+// 			users.forEach(function(contact) {
+// 				if (!contact.smsResponse && contact.phone){
+// 					smsTest.messages.create({
+// 						body: "בוקר טוב! \nאנחנו צריכים לוודא את הגעתך לאירוע MTA Hack 2017 כדי להזמין לך חולצה, אוכל ובירות ;)\nאתם מגיעים? השיבו 1\nאתם לא מגיעים? השיבו 0",
+// 						to: contact.phone,
+// 						from: myNumber
+// 					}, function(err, data) {
+// 						if (err) {
+// 							console.error('Could not notify administrator');
+// 						} else {
+// 							console.log('Sent');
+// 						}
+// 					});
+// 				}
+// 			});
+// 			res.send("Was Sent");
 // 		}
-// 	];
-// 	var accountSID ='AC8cc44449556173df7b6e4885e9b84a19',
-// 		accountToken = '71e5474d1cdc5cbe705facb6935b91e9',
-// 		myNumber='+972524880947';
-// 	var smsTest = require('twilio')(accountSID, accountToken);
-// 	contacts.forEach(function(contact){
-// 		smsTest.messages.create({
-// 			body: contact.name + "מה קורה",
-// 			to: contact.phone,
-// 			from: myNumber
-// 		}, function(err, data) {
-// 			if (err) {
-// 				console.error('Could not notify administrator');
-// 				console.error(err);
-// 			} else {
-// 				console.log(data);
-// 				console.log('Administrator notified');
-// 			}
-// 		});
-// 	});
-// 	res.send("Was Sent");
+// 	})
 // };
 var getUserByPhoneNumber = function getUserByPhoneNumber(phoneNumber, body) {
 	var deferred = Q.defer();
@@ -950,8 +1016,9 @@ exports.getSMSFromClient = function getSMSFromClient(req, res) {
 			res.send(xmlResponse);
 		})
 		.done();
-
 };
+
+
 
 
 

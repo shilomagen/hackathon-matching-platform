@@ -30,9 +30,9 @@ module.exports = function(app) {
 	app.route('/forgot').post(params.isRegistrationOpen, users.forgot);
 
 	app.route('/resetme/:resetId').get(params.isRegistrationOpen, users.renderResetme);
-	app.route('/printUsers').get(users.isUserAdminRole, users.renderPrintUsers);
+	app.route('/print-users').get(users.isUserAdminRole, users.renderPrintUsers);
+	app.route('/print-mentors').get(users.isUserAdminRole, users.renderPrintMentors);
 	app.route('/adminspace').get(users.isUserAdminRole, users.renderAdminspace);
-	// app.route('/adminspace/sms-sender').get(users.isUserAdminRole, users.sendSMSTest);
 	app.route('/observ-sms').post(users.getSMSFromClient);
 	app.route('/login')
 		.get(users.renderLogin)
@@ -41,9 +41,7 @@ module.exports = function(app) {
 		.get(users.logedIn, users.isMentor, users.renderMentorUp);
 	app.route('/search_member')
 		.get(users.logedIn, users.searchUserByEmailAutocomplete);
-
 	app.route('/rsvp/:userIdToUpdate').get(users.userAgree);
-
 	app.route('/reset').get(users.isUserAdminRole, users.renderReset);
 
 	app.get('/logout', users.logout);
