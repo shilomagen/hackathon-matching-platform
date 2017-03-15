@@ -33,6 +33,7 @@
     "helmet": "^1.3.0",
     "mongoose": "^4.2.8",
     "morgan": "^1.7.0",
+    "multer": "^1.3.0",
     "multer-storage-s3": "^1.1.1",
     "nodemailer": "^2.2.1",
     "nodemon": "*",

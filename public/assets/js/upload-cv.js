@@ -1,5 +1,22 @@
 Dropzone.options.uploadStudentCV = {
 	maxFiles: 1,
+	init: function(){
+		var _self = this;
+		this.on('addedfile', function() {
+			var $addBtn = $('<button />').attr('type', 'button').attr('id','uploadCVBtn').addClass('btn btn-primary upload-cv-btn').text("Upload ").append($('<i />').addClass('fa fa-cloud-upload fa-1x')).click(function(e) {
+				e.preventDefault();
+				$('.dropzone')[0].dropzone.processQueue();
+			});
+			var $removeFile = $('<button />').attr('type', 'button').attr('id', 'cancelUploadCVBtn').addClass('btn btn-danger upload-cv-btn').text("Clear ").append($('<i />').addClass('fa fa-trash fa-1x')).click(function() {
+				_self.removeAllFiles();
+			});
+			$('#uploadCVBtnBar').append($addBtn, $removeFile);
+			$('#errorUploadCV').hide();
+		});
+		this.on('removedfile', function() {
+			$('#uploadCVBtnBar').empty();
+		});
+	},
 	renameFilename: function(name) {
 		console.log(name);
 		return $('#uploadStudentCV').data('user_fullname') + '_cv.pdf';
@@ -9,20 +26,20 @@ Dropzone.options.uploadStudentCV = {
 		this.removeAllFiles();
 		this.addFile(file);
 	},
-	removedfile: function() {
-		$('#uploadCVBtnBar').empty();
-	},
-	addedfile: function() {
-		var $addBtn = $('<button />').attr('type', 'button').attr('id', 'uploadCVBtn').addClass('btn btn-primary upload-cv-btn').text("Upload ").append($('<i />').addClass('fa fa-cloud-upload fa-1x')).click(function(e) {
-			e.preventDefault();
-			$('.dropzone')[0].dropzone.processQueue();
-
-		});
-		var $removeFile = $('<button />').attr('type', 'button').attr('id', 'cancelUploadCVBtn').addClass('btn btn-danger upload-cv-btn').text("Clear ").append($('<i />').addClass('fa fa-trash fa-1x')).click(function() {
-			_self.removeAllFiles();
-		});
-		$('#uploadCVBtnBar').append($addBtn, $removeFile);
-	},
+	// removedfile: function() {
+	// 	$('#uploadCVBtnBar').empty();
+	// },
+	// addedfile: function() {
+	// 	var $addBtn = $('<button />').attr('type', 'button').attr('id', 'uploadCVBtn').addClass('btn btn-primary upload-cv-btn').text("Upload ").append($('<i />').addClass('fa fa-cloud-upload fa-1x')).click(function(e) {
+	// 		e.preventDefault();
+	// 		$('.dropzone')[0].dropzone.processQueue();
+	//
+	// 	});
+	// 	var $removeFile = $('<button />').attr('type', 'button').attr('id', 'cancelUploadCVBtn').addClass('btn btn-danger upload-cv-btn').text("Clear ").append($('<i />').addClass('fa fa-trash fa-1x')).click(function() {
+	// 		_self.removeAllFiles();
+	// 	});
+	// 	$('#uploadCVBtnBar').append($addBtn, $removeFile);
+	// },
 	sending: function(file, xhr) {
 		var $loadingSpinner = $('<i />').addClass('fa fa-spinner fa-spin fa-fw');
 		$('#uploadCVBtn').prepend($loadingSpinner).prop('disabled', true);
