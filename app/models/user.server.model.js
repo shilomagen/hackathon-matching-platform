@@ -51,7 +51,8 @@ var UserSchema = new Schema({
 	},
 	mentor_company: String,
 	appliedTeams: [],
-	smsResponse: String
+	smsResponse: String,
+	cs_file_name: String
 });
 
 UserSchema.static('findByEmail', function(email, callback) {

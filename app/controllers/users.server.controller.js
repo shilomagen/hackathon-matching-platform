@@ -6,8 +6,10 @@ var User = require('mongoose').model('User'),
 	config = require('../../config/config'),
 	ROLES = require('./../models/user.server.model').ROLES,
 	Q = require('q'),
-	xml = require('xml');
-
+	xml = require('xml'),
+	s3 = require('multer-storage-s3'),
+	fs = require('fs');
+// awsSdk = require('aws-sdk');
 
 //Init the SMTP transport
 var smtpConfig = {
@@ -23,6 +25,8 @@ var smtpConfig = {
 	}
 };
 
+// awsSdk.Config(config.awsS3);
+// var cvBucket = new awsSdk.S3({params: {Bucket: 'mtahack-cvs'}});
 var transporter = nodemailer.createTransport(smtpConfig);
 
 function sendContactUsEmail(body) {
@@ -144,7 +148,7 @@ exports.renderMentorUp = function renderMentorUp(req, res) {
 			],
 			eventName: config.eventname,
 			footerData: config.eventMediaLinks
-		})
+		});
 	}
 };
 
@@ -550,6 +554,22 @@ exports.forgot = function(req, res, next) {
 		}
 	);
 };
+
+exports.renderUploadCV = function(req, res) {
+	res.render('upload-cv', {
+		user: req.user,
+		pageTitle: 'Upload your CV',
+		menu: [
+			{name: 'Home', path: '/', isActive: true},
+			{name: 'Logout', path: '/logout', isActive: false}
+		],
+		eventName: config.eventname,
+		footerData: config.eventMediaLinks
+	});
+
+
+};
+
 exports.register = function(req, res, next) {
 	if (!req.user) {
 		var user = new User(req.body);
@@ -649,6 +669,16 @@ exports.saveOAuthUserProfile = function(req, profile, done) {
 		}
 	);
 };
+
+exports.s3StorageConfig = s3({
+	destination: function(req, file, cb) {
+		cb(null, 'students/cvs');
+	},
+	filename: function(req, file, cb) {
+		cb(null, file.originalname);
+	}
+});
+
 
 exports.create = function(req, res, next) {
 	var user = new User(req.body);
@@ -1018,6 +1048,15 @@ exports.getSMSFromClient = function getSMSFromClient(req, res) {
 		.done();
 };
 
+exports.updateUserUploadCV = function updateUserUploadCV(req, res, next) {
+	User.findOneAndUpdate({_id: req.user._id}, {cs_file_name: req.user.first_name + '_' + req.user.last_name + '_cv.pdf'}, function(err) {
+		if (err) {
+			next(new Error(err));
+		} else {
+			next();
+		}
+	});
+};
 
 
 

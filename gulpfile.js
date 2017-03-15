@@ -14,7 +14,7 @@ var jsFiles = 'public/assets/js/*.js',
 	cssDest = 'public/dist/styles',
 	jsAdminFiles = 'public/assets/js/admin/*.js';
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['scripts', 'admin-scripts', 'styles', 'watch']);
 
 gulp.task('scripts', function() {
 	return gulp.src(jsFiles)

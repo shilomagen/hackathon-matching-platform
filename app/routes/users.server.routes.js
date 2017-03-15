@@ -1,7 +1,8 @@
 var users = require('../../app/controllers/users.server.controller'),
 	params = require('../../app/controllers/params.server.controller'),
 	passport = require('passport'),
-	flash = require('connect-flash');
+	flash = require('connect-flash'),
+	multer = require('multer');
 
 module.exports = function(app) {
 	app.route('/users')
@@ -43,7 +44,10 @@ module.exports = function(app) {
 		.get(users.logedIn, users.searchUserByEmailAutocomplete);
 	app.route('/rsvp/:userIdToUpdate').get(users.userAgree);
 	app.route('/reset').get(users.isUserAdminRole, users.renderReset);
-
+	app.route('/upload-cv').get(users.logedIn, users.renderUploadCV)
+		.post(users.logedIn, multer({storage: users.s3StorageConfig, limits: {fileSize: 2000 * 1000}}).single('file'), users.updateUserUploadCV, function(req, res) {
+			res.send("Upload successfully.");
+		});
 	app.get('/logout', users.logout);
 
 	app.post('/contactus', users.sendMail);
