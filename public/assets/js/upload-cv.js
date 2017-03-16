@@ -18,8 +18,7 @@ Dropzone.options.uploadStudentCV = {
 		});
 	},
 	renameFilename: function(name) {
-		console.log(name);
-		return $('#uploadStudentCV').data('user_fullname') + '_cv.pdf';
+		return $('#uploadStudentCV').data('user_fullname') + '_cv.' + name.split('.').pop();
 	},
 	dictDefaultMessage: '<b>Drop files here or click to upload</b>',
 	maxfilesexceeded: function(file) {
