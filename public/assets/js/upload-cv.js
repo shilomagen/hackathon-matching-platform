@@ -64,15 +64,16 @@ Dropzone.options.uploadStudentCV = {
 		});
 		$registerSuccessModal.modal('show');
 	},
-	error: function (err) {
+	error: function (file, err) {
 		var $generalFailModal = $('#generalFailModal'),
 			errVal = $generalFailModal.find('#modalFailContent');
 		$generalFailModal.modal('show');
-		errVal.text("We have a problem. Please try again or contact administrator ASAP");
+		errVal.text(err);
+		this.removeAllFiles();
 	},
 	complete: function() {
 		$('#uploadCVBtnBar').empty();
 	},
-	acceptedFiles: 'application/pdf',
+	acceptedFiles: 'application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword',
 	autoProcessQueue: false
 };
