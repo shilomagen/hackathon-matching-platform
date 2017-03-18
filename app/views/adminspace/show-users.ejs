@@ -1,0 +1,74 @@
+<% include ./partials/header-admin %>
+<div class="container">
+    <div class="row mt-1">
+        <div class="input-group input-group-lg">
+            <input id="searchInput" type="text" class="form-control" placeholder="Search..."
+                   aria-describedby="sizing-addon1">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-1">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Accepted</th>
+            <th>In Team</th>
+            <th>RSVP</th>
+        </tr>
+        </thead>
+        <tbody id="fbody">
+        <% for(var i = 0; i < users.length; i++) { %>
+        <tr>
+            <td><span>
+                                <%= i + 1 %>
+                            </span></td>
+            <td class="text-capitalize"><%= users[i].first_name + " " + users[i].last_name %></td>
+            <td><span id="email"><%= users[i].email %></span></td>
+            <td><span class="phone"><%= users[i].phone %></span></td>
+            <td>
+                <div data-uid="<%= users[i]._id %>" class="accept-user" data-accepted="<%= users[i].accepted %>">
+                    <% if (!users[i].accepted) { %>
+                    <button type="button" class="btn btn-secondary accept-user btn-sm">Accept User</button>
+                    <% } else { %>
+                    <button type="button" class="btn btn-success btn-sm">User Accepted</button>
+                    <% } %>
+
+                </div>
+            </td>
+            <td>
+                <div>
+                    <% if (users[i].isMember){ %>
+                    <i class="fa fa-check" style="color: rgba(135, 181, 0, 1.00)" aria-hidden="true"></i>
+                    <% }else { %>
+                    <i class="fa fa-times" style="color: #db5a3c" aria-hidden="true"></i>
+                    <% } %>
+                </div>
+
+            </td>
+            <td>
+                <div>
+                    <% var smsResponse = users[i].smsResponse; %>
+                    <% if (!smsResponse) { %>
+                    <span>Did not response</span>
+                    <% } else { %>
+                    <% if (smsResponse === '1'){ %>
+                    <i class="fa fa-check" style="color: rgba(135, 181, 0, 1.00)" aria-hidden="true"></i>
+                    <% }else if (smsResponse === '0') { %>
+                    <i class="fa fa-times" style="color: #db5a3c" aria-hidden="true"></i>
+                    <% } else{ %>
+                    <span><%= smsResponse %></span>
+                    <% } } %>
+                </div>
+
+            </td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<% include ./partials/footer-admin %>

@@ -215,6 +215,14 @@ ul.chosen-choices {
     background-image: none;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, .15);
     border-radius: .25rem;
+}
+
+.upload-cv-btn:first-child {
+    margin-right: 20px;
+}
+
+.upload-cv-btn {
+    border-radius: 28px;
 }

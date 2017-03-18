@@ -1,0 +1,16 @@
+<% include ./partials/header %>
+<!-- Top content -->
+
+<div class="container mt-1">
+    <% if (user.cs_file_name) { %>
+    <div class="alert alert-info" role="alert">
+        <strong>Heads up!</strong> You're already uploaded a file. Upload another file to replace your current CV.
+    </div>
+    <% } %>
+    <form action="/upload-cv"
+          class="dropzone text-xs-center"
+          id="uploadStudentCV" data-user_fullname="<%= user.first_name + '_' + user.last_name %>"></form>
+    <div id="uploadCVBtnBar" class="text-xs-center mt-1"></div>
+</div>
+<% include ./partials/modals %>
+<% include ./partials/footer %>

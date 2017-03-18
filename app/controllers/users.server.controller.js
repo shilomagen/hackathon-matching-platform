@@ -5,8 +5,11 @@ var User = require('mongoose').model('User'),
 	nodemailer = require('nodemailer'),
 	config = require('../../config/config'),
 	ROLES = require('./../models/user.server.model').ROLES,
-	Q = require('q');
-
+	Q = require('q'),
+	xml = require('xml'),
+	s3 = require('multer-storage-s3'),
+	fs = require('fs');
+// awsSdk = require('aws-sdk');
 
 //Init the SMTP transport
 var smtpConfig = {
@@ -21,6 +24,9 @@ var smtpConfig = {
 		rejectUnauthorized: false
 	}
 };
+
+// awsSdk.Config(config.awsS3);
+// var cvBucket = new awsSdk.S3({params: {Bucket: 'mtahack-cvs'}});
 var transporter = nodemailer.createTransport(smtpConfig);
 
 function sendContactUsEmail(body) {
@@ -142,10 +148,10 @@ exports.renderMentorUp = function renderMentorUp(req, res) {
 			],
 			eventName: config.eventname,
 			footerData: config.eventMediaLinks
-		})
+		});
 	}
-
 };
+
 exports.renderLogin = function(req, res, next) {
 	if (!req.user) {
 		res.render('index', {
@@ -226,27 +232,78 @@ exports.renderMentorRegistration = function(req, res) {
 
 exports.renderPrintUsers = function(req, res, next) {
 	//if (!req.user) {
-	User.find({}, function(err, users) {
+	User.find({'role': ROLES.Student}, function(err, users) {
 		if (err) {
 			return next(err);
 		}
 		else {
-			res.render('showUsers', {
-				title: 'Show Users Panel',
+			res.render('adminspace/show-users', {
+				title: 'Users',
 				users: users,
+				menu: [
+					{
+						name: 'Home',
+						path: '/',
+						isActive: false
+					},
+					{
+						name: 'Adminspace',
+						path: '/adminspace',
+						isActive: true
+					},
+					{
+						name: 'Logout',
+						path: '/logout',
+						isActive: false
+					}
+				],
 				messages: req.flash('error'),
 				suppemail: config.supportEmailAddr,
+				pageTitle: 'Adminspace',
 				eventname: config.eventname,
 				eventwebsite: config.eventwebsite,
 				eventfacebook: config.eventfacebook,
-				roles: ROLES,
 				footerData: config.eventMediaLinks
 			});
 		}
 	});
-	//} else {
-	//	return res.redirect('/');
-	//}
+};
+
+exports.renderPrintMentors = function(req, res, next) {
+	User.find({'role': ROLES.Mentor}, function(err, mentors) {
+		if (err) {
+			next(err);
+		} else {
+			res.render('adminspace/show-mentor', {
+				title: 'Users',
+				users: mentors,
+				menu: [
+					{
+						name: 'Home',
+						path: '/',
+						isActive: false
+					},
+					{
+						name: 'Adminspace',
+						path: '/adminspace',
+						isActive: true
+					},
+					{
+						name: 'Logout',
+						path: '/logout',
+						isActive: false
+					}
+				],
+				messages: req.flash('error'),
+				suppemail: config.supportEmailAddr,
+				pageTitle: 'Adminspace',
+				eventname: config.eventname,
+				eventwebsite: config.eventwebsite,
+				eventfacebook: config.eventfacebook,
+				footerData: config.eventMediaLinks
+			});
+		}
+	})
 };
 
 exports.renderAdminspace = function(req, res, next) {
@@ -256,6 +313,7 @@ exports.renderAdminspace = function(req, res, next) {
 			return next(err);
 		} else {
 			Team.count({}, function(err, teamCount) {
+				var usersMap = mapUsers(users);
 				res.render('adminspace', {
 					eventName: config.eventname,
 					pageTitle: 'Adminspace',
@@ -276,8 +334,7 @@ exports.renderAdminspace = function(req, res, next) {
 							isActive: false
 						}
 					],
-					usersCount: users.length,
-					approvedUsers: howManyUsersApproved(users),
+					usersMap: usersMap,
 					teamCount: teamCount,
 					footerData: config.eventMediaLinks
 				});
@@ -287,14 +344,30 @@ exports.renderAdminspace = function(req, res, next) {
 	});
 };
 
-var howManyUsersApproved = function(usersArr) {
-	var counter = 0;
-	usersArr.forEach(function(user) {
-		if (user.accepted) {
-			counter++;
-		}
-	});
-	return counter;
+//@T@
+var mapUsers = function mapUsers(users) {
+	var studentsCount = 0,
+		mentorsCount = 0,
+		approvedUsersCount = 0;
+	if (users instanceof Array && users.length > 0) {
+		users.forEach(function(user) {
+			if (user.role === ROLES.Student) {
+				studentsCount++;
+				if (user.accepted) {
+					approvedUsersCount++;
+				}
+			} else if (user.role === ROLES.Mentor) {
+				mentorsCount++;
+			}
+		})
+	}
+	return {
+		students: studentsCount,
+		mentors: mentorsCount,
+		approvedUsers: approvedUsersCount
+	}
+
+
 };
 
 exports.renderParams = function(req, res, next) {
@@ -432,7 +505,7 @@ exports.renderResetme = function(req, res, next) {
 };
 
 exports.passer = function(req, res, next) {
-	console.log(req.body)
+	console.log(req.body);
 	if (!req.body.email || req.body.email === "" || !req.body.resetPass || req.body.resetPass.length == 0) {
 		res.send("you did something wrong. try again or contact " + config.emailAddr)
 	}
@@ -481,11 +554,28 @@ exports.forgot = function(req, res, next) {
 		}
 	);
 };
+
+exports.renderUploadCV = function(req, res) {
+	res.render('upload-cv', {
+		user: req.user,
+		pageTitle: 'Upload your CV',
+		menu: [
+			{name: 'Home', path: '/', isActive: true},
+			{name: 'Logout', path: '/logout', isActive: false}
+		],
+		eventName: config.eventname,
+		footerData: config.eventMediaLinks
+	});
+
+
+};
+
 exports.register = function(req, res, next) {
 	if (!req.user) {
 		var user = new User(req.body);
 		var message = null;
 		user.provider = 'local';
+		user.role = ROLES.Student;
 		user.save(function(err) {
 			if (err) {
 				console.log(err);
@@ -579,6 +669,16 @@ exports.saveOAuthUserProfile = function(req, profile, done) {
 		}
 	);
 };
+
+exports.s3StorageConfig = s3({
+	destination: function(req, file, cb) {
+		cb(null, 'students/cvs');
+	},
+	filename: function(req, file, cb) {
+		cb(null, file.originalname);
+	}
+});
+
 
 exports.create = function(req, res, next) {
 	var user = new User(req.body);
@@ -822,6 +922,140 @@ exports.leaveTeam = function(req, res) {
 			}
 		});
 	}
+};
+
+// exports.renderSmsSender = function(req, res) {
+// 	User.find({}, function(err, users) {
+// 		if (err) {
+// 			return next(err);
+// 		} else {
+// 			Team.count({}, function(err, teamCount) {
+// 				res.render('adminspace/sms', {
+// 					eventName: config.eventname,
+// 					pageTitle: 'SMS Sender',
+// 					menu: [
+// 						{
+// 							name: 'Home',
+// 							path: '/',
+// 							isActive: false
+// 						},
+// 						{
+// 							name: 'Adminspace',
+// 							path: '/adminspace',
+// 							isActive: true
+// 						},
+// 						{
+// 							name: 'Logout',
+// 							path: '/logout',
+// 							isActive: false
+// 						}
+// 					],
+// 					usersCount: users.length,
+// 					approvedUsers: howManyUsersApproved(users),
+// 					teamCount: teamCount,
+// 					footerData: config.eventMediaLinks
+// 				});
+// 			});
+//
+// 		}
+// 	});
+// };
+
+// exports.sendSMSTest = function(req, res) {
+// 	User.find({'role': 'student'}, function(err, users) {
+// 		if (err) {
+// 			console.log(err);
+// 		} else {
+// 			var accountSID = 'AC8cc44449556173df7b6e4885e9b84a19',
+// 				accountToken = '71e5474d1cdc5cbe705facb6935b91e9',
+// 				myNumber = '+972524880947';
+// 			var smsTest = require('twilio')(accountSID, accountToken);
+// 			users.forEach(function(contact) {
+// 				if (!contact.smsResponse && contact.phone){
+// 					smsTest.messages.create({
+// 						body: "בוקר טוב! \nאנחנו צריכים לוודא את הגעתך לאירוע MTA Hack 2017 כדי להזמין לך חולצה, אוכל ובירות ;)\nאתם מגיעים? השיבו 1\nאתם לא מגיעים? השיבו 0",
+// 						to: contact.phone,
+// 						from: myNumber
+// 					}, function(err, data) {
+// 						if (err) {
+// 							console.error('Could not notify administrator');
+// 						} else {
+// 							console.log('Sent');
+// 						}
+// 					});
+// 				}
+// 			});
+// 			res.send("Was Sent");
+// 		}
+// 	})
+// };
+var getUserByPhoneNumber = function getUserByPhoneNumber(phoneNumber, body) {
+	var deferred = Q.defer();
+	User.find({'phone': new RegExp(phoneNumber, 'i')}, function(err, user) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			if (!user) {
+				deferred.reject("NoUser");
+			} else {
+				deferred.resolve({user: user, smsBody: body});
+			}
+		}
+
+	});
+	return deferred.promise;
+};
+
+var insertResponseToDB = function insertResponseToDB(obj) {
+	var user = obj.user,
+		smsBody = obj.smsBody,
+		deferred = Q.defer();
+	user.smsResponse = smsBody;
+	if (user instanceof Array) {
+		user = user[0];
+	}
+	user.save(function(err) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(true);
+		}
+	});
+	return deferred.promise;
+};
+
+exports.getSMSFromClient = function getSMSFromClient(req, res) {
+	var from = req.body.From.substring(4); //Remove +972 at the beginning
+	getUserByPhoneNumber(from, req.body.Body)
+		.then(insertResponseToDB)
+		.then(function() {
+			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
+			res.set('Content-Type', 'text/xml');
+			res.send(xmlResponse);
+			var subject = "SMS Response from " + req.body.From;
+			var body = "RESPONSE: " + req.body.Body;
+			sendGeneralEmail(config.emailAddr, subject, body);
+		})
+		.catch(function(err) {
+			console.error(err);
+			var subject = "SMS Response from " + req.body.From;
+			var body = "RESPONSE: " + req.body.Body;
+			sendGeneralEmail(config.emailAddr, subject, body);
+			var xmlResponse = xml({Response: [{Message: 'קיבלנו את תשובתך, תודה!'}]});
+			res.set('Content-Type', 'text/xml');
+			res.send(xmlResponse);
+		})
+		.done();
+};
+
+exports.updateUserUploadCV = function updateUserUploadCV(req, res, next) {
+	User.findOneAndUpdate({_id: req.user._id}, {cs_file_name: req.user.first_name + '_' + req.user.last_name + '_cv.pdf'}, function(err) {
+		if (err) {
+			next(new Error(err));
+		} else {
+			next();
+		}
+	});
 };
 
 

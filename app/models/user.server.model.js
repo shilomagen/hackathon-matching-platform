@@ -49,7 +49,10 @@ var UserSchema = new Schema({
 		type: String,
 		default: ROLES.Student
 	},
-	appliedTeams: []
+	mentor_company: String,
+	appliedTeams: [],
+	smsResponse: String,
+	cs_file_name: String
 });
 
 UserSchema.static('findByEmail', function(email, callback) {
