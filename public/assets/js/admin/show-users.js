@@ -14,7 +14,7 @@ $('.accept-user').click(function(e) {
 		success: function(data) {
 			if (data.status === 'ok') {
 				alert("User changed");
-				window.location.replace('/print-users')
+				window.location.replace('/adminspace/print-users')
 			} else {
 				alert("Can't update user");
 			}

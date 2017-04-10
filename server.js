@@ -1,14 +1,19 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-var config = require('./config/config'),
+const config = require('./config/config'),
     mongoose = require('./config/mongoose'),
     express = require('./config/express'),
-    passport = require('./config/passport');
-var db = mongoose(),
+    passport = require('./config/passport'),
+    appInitiator = require('./config/init/app.init');
+const db = mongoose(),
     app = express(),
-    passport = passport();
-
-app.listen(config.port);
+    passportInitiator = passport();
+appInitiator.initApp()
+    .then(() => {
+        app.listen(config.port);
+        console.log(`${process.env.NODE_ENV} server running at http://${config.host}:${config.port}`);
+    }).catch((err) => {
+    console.error(err);
+});
 
 module.exports = app;
-console.log(process.env.NODE_ENV + ' server running at http://' + config.host + ':' + config.port);

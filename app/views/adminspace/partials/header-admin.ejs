@@ -10,15 +10,15 @@
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link rel="stylesheet" href="dist/styles/bundle.min.css">
+    <link rel="stylesheet" href="../dist/styles/bundle.min.css">
     <link href="assets/favicon.ico" rel="icon" type="image/x-icon" />
     <meta charset="UTF-8">
     <title>
-        <%= eventname %>
+        <%= eventName %>
     </title>
 </head>
 <nav class="navbar navbar-light">
-    <a class="navbar-brand" href="/"><%= eventname %><span style="font-weight: bold"> <%= pageTitle %></span></a>
+    <a class="navbar-brand" href="/"><%= eventName %><span style="font-weight: bold"> <%= pageTitle %></span></a>
     <ul class="nav navbar-nav float-xs-right">
         <%
         menu.forEach(function(menuItem){

@@ -1,0 +1,46 @@
+<% include ./partials/header %>
+
+<div class="container">
+    <div class="row mt-1" style="width: 80%;">
+        <div style="float:left"><img src="https://image.flaticon.com/icons/svg/189/189098.svg"
+                                     style="height: 200px; width: 200px;"></div>
+        <div style="margin-left: 30%"><h1>Teams Rating</h1>
+            <p class="h4"> Hi! start rating the teams - the team with the highest score will get the audience
+                reward! </p></div>
+    </div>
+</div>
+<div class="container-fluid mt-1">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Team Name</th>
+            <th>Rate 1-5</th>
+
+        </tr>
+        </thead>
+        <tbody id="fbody">
+        <% for(var i = 0; i < teams.length; i++) {
+            var teamId = teams[i]._id;
+            var userVote = 0;
+        if (user.votes && user.votes[teamId]) {
+        userVote = user.votes[teamId]; }%>
+        <tr data-team-id="<%= teamId %>" data-current-vote="<%= userVote %>">
+            <td><span><%= i + 1 %></span></td>
+            <td> <%= teams[i].team_name %> </td>
+            <td>
+                <div class="btn-group mr-2" role="group">
+                    <button type="button" data-score="1" class="usersVoteBtn btn btn-secondary <% if (userVote === 1) { %>btn-success <% } %>">1</button>
+                    <button type="button" data-score="2" class="usersVoteBtn btn btn-secondary <% if (userVote === 2) { %>btn-success <% } %>">2</button>
+                    <button type="button" data-score="3" class="usersVoteBtn btn btn-secondary <% if (userVote === 3) { %>btn-success <% } %>">3</button>
+                    <button type="button" data-score="4" class="usersVoteBtn btn btn-secondary <% if (userVote === 4) { %>btn-success <% } %>">4</button>
+                    <button type="button" data-score="5" class="usersVoteBtn btn btn-secondary <% if (userVote === 5) { %>btn-success <% } %>">5</button>
+                </div>
+            </td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<% include ./partials/footer %>
