@@ -4,5 +4,6 @@ module.exports = function (app) {
     app.get('/team-up', params.isTeamsOpen, index.render);
     app.get('/', index.render);
     app.get('/mingle', params.isTeamsOpen, index.renderMingle);
+    app.get('/vote', params.isUsersVotingOpen, index.renderUsersVoting);
 
 };

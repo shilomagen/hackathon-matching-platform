@@ -6,8 +6,8 @@ var teams = require('../../app/controllers/teams.server.controller'),
 module.exports = function (app) {
     app.route('/teams')
         .post(params.isTeamsOpen, teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.preVerifyTeamCreate, teams.preVerifyNewTeamMembers, teams.create, teams.updateNewTeamMembers)
-        .get(teams.logedIn, users.permissionCheck, teams.list);
-    app.route('/teams/:teamId').get(params.isTeamsOpen, teams.logedIn, users.permissionCheck, teams.read)
+        .get(teams.logedIn, users.isUserAdminRole, teams.list);
+    app.route('/teams/:teamId').get(params.isTeamsOpen, teams.logedIn, users.isUserAdminRole, teams.read)
         .put(params.isTeamsOpen, teams.logedIn, teams.verifyUserPermissionOnUpdateTeam, teams.preVerifyNewTeamMembers, teams.update, teams.updateUserMembership)
         .delete(params.isTeamsOpen, teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.updateRelatedMembers, teams.delete);
     app.route('/teams/:teamId/apply').post(params.isTeamsOpen, teams.logedIn, users.isInTeam, teams.addUserApplicationToTeam);
@@ -18,7 +18,7 @@ module.exports = function (app) {
     app.route('/createTeam').get(params.isTeamsOpen, teams.logedIn, teams.createTeamPage);
     app.route('/updateTeam').get(params.isTeamsOpen, teams.logedIn, teams.createUpdateTeamPage);
     app.route('/myTeam').get(params.isTeamsOpen, teams.logedIn, teams.createMyTeamPage);
-
+    app.route('/vote/:teamId').post(params.isUsersVotingOpen, users.logedIn, teams.updateUserTeamVote);
     app.param('teamId', teams.teamByID);
 
 };

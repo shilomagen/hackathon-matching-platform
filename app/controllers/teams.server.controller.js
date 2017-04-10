@@ -534,3 +534,9 @@ exports.removeTeamMemberFromTeam = function(req, res) {
 		})
 		.done();
 };
+
+exports.updateUserTeamVote = function(req, res){
+	Team.findById(req.params.teamId, (err, team)=>{
+
+	});
+};

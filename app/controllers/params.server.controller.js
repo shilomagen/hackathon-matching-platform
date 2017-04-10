@@ -1,9 +1,12 @@
-var Param = require('mongoose').model('Param'),
+const Param = require('mongoose').model('Param'),
     User = require('mongoose').model('User'),
-    config = require('../../config/config');
+    config = require('./../../config/config'),
+    PARAM_TYPES = require('./../../config/init/params.config').PARAMS,
+    _ = require('lodash'),
+    async = require('async');
 
-exports.renderParams = function (req, res, next) {
-    Param.find({}, function (err, params) {
+exports.renderParams = function(req, res, next) {
+    Param.find({}, function(err, params) {
         if (err) {
             return next(err);
         }
@@ -20,98 +23,99 @@ exports.renderParams = function (req, res, next) {
     });
 };
 
-exports.isRegistrationOpen = function (req, res, next) {
-    Param.findOne({name: "users"}, function (err, param) {
+exports.isRegistrationOpen = function(req, res, next) {
+    Param.findOne({name: PARAM_TYPES.USERS_REGISTRATION}, function(err, param) {
         if (err) {
             console.log(err);
             return next(err);
-            //case param not found, add as open
-        } else if (!param) {
-            var p = new Param({"name": "users", isOpen: true});
-            p.save(function (err) {
-                if (err) {
-                    console.log(err);
-                    var message = getErrorMessage(err);
-                    req.flash('error', message);
-                    if (err.code === 11000) {
-                        return res.status(409).json(err.code);
-                    } else {
-                        return res.status(500).json(err.code);
-                    }
-                } else {
-                    next();
-                }
-            });
         } else if (!param.isOpen) {
             res.redirect('/');
+        } else {
+            next();
+        }
+    });
+};
+
+exports.isMentorRegistrationOpen = function(req, res, next) {
+    Param.findOne({name: PARAM_TYPES.MENTOR_REGISTRATION}, function(err, param) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        } else if (!param.isOpen) {
+            res.redirect('/');
+        } else {
+            next();
+        }
+    });
+};
+
+exports.isUsersVotingOpen = function(req, res, next) {
+    Param.findOne({name: PARAM_TYPES.USER_VOTES}, (err, param) => {
+        if (err) {
+            console.error(err);
+            return next(err);
+        } else if (!param.isOpen) {
+            res.redirect('/');
+        } else {
+            next();
+        }
+    });
+
+};
+exports.isTeamsOpen = function(req, res, next) {
+    Param.findOne({name: PARAM_TYPES.TEAM_CREATION}, function(err, param) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        } else if (!param.isOpen) {
+            res.status(403).send("<h1>Team Platform is currently closed</h1>");
         } else {
             next();
         }
     })
 };
 
-exports.isTeamsOpen = function (req, res, next) {
-    if (req.user) {
-        User.findById(req.user._id, function (err, user) {
+exports.updateParams = function(req, res) {
+    console.log(`==> Updating params...`);
+    Param.find({}, (err, params) => {
+        if (err) {
+            res.status(500).send('Problem update params');
+        } else {
+            params = params.map(param => {
+                param = param.toObject();
+                return _.omit(param, ['_id', '__v']);
+            });
+            let paramsToUpdate = _.differenceWith(JSON.parse(req.body.params), params, _.isEqual),
+                tasksArr = [];
+            paramsToUpdate.forEach((paramUpdate) => {
+                tasksArr.push(createUpdateParamTask(paramUpdate));
+            });
+            async.parallel(tasksArr, (err, tasks) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('Problem update params');
+                } else {
+                    tasks.forEach((task) => {
+                        console.log(`==>${task}`);
+                    });
+                    console.log(`==> Finished update params... `);
+                    res.status(200).send('Params updated successfully');
+                }
+            });
+        }
+
+    });
+};
+
+const createUpdateParamTask = (param) => {
+    return (cb) => {
+        Param.findOneAndUpdate({name: param.name}, param, (err, param) => {
             if (err) {
-                return next(err);
-            } else if (User.isAdmin(user)) {
-                next();
+                cb(err);
             } else {
-                Param.findOne({name: "teams"}, function (err, param) {
-                    if (err) {
-                        console.log(err);
-                        return next(err);
-                    } else if (!param) {
-                        var p = new Param({"name": "teams", isOpen: true});
-                        p.save(function (err) {
-                            if (err) {
-                                console.log(err);
-                                var message = getErrorMessage(err);
-                                req.flash('error', message);
-                                if (err.code === 11000) {
-                                    return res.status(409).json(err.code);
-                                } else {
-                                    return res.status(500).json(err.code);
-                                }
-                            } else {
-                                next();
-                            }
-                        });
-                    } else if (!param.isOpen) {
-                        res.status(403).send("<h1>Team Platform is currently closed</h1>");
-                    } else {
-                        next();
-                    }
-                })
+                cb(null, `Param ${param.name} was update successfully`);
             }
-        })
-    } else {
-        Param.findOne({name: "teams"}, function (err, param) {
-            if (err) {
-                return next(err);
-            } else if (!param) {
-                var p = new Param({"name": "teams", isOpen: true});
-                p.save(function (err) {
-                    if (err) {
-                        console.log(err);
-                        var message = getErrorMessage(err);
-                        req.flash('error', message);
-                        if (err.code === 11000) {
-                            return res.status(409).json(err.code);
-                        } else {
-                            return res.status(500).json(err.code);
-                        }
-                    } else {
-                        next();
-                    }
-                });
-            } else if (!param.isOpen) {
-                res.redirect('/');
-            } else {
-                next();
-            }
-        })
+        });
     }
 };
 

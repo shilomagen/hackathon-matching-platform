@@ -34,6 +34,8 @@ module.exports = function() {
 	require('../app/routes/teams.server.routes.js')(app);
 	require('../app/routes/params.server.routes.js')(app);
 
+	require('./../app/services');
+
 	app.use(express.static('./public'));
 
 	app.use(function(err, req, res, next) {

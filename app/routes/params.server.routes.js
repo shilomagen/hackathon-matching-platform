@@ -3,7 +3,5 @@ var users = require('../../app/controllers/users.server.controller'),
     passport = require('passport');
 
 module.exports = function (app) {
-    app.route('/params').get(users.permissionCheck, users.renderParams);
-    app.route('/params/:paramId').put(users.permissionCheck, users.updateParam);
-
+    app.route('/adminspace/params').get(users.isUserAdminRole, users.renderParams).put(users.isUserAdminRole, params.updateParams);
 };

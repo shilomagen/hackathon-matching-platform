@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ParamSchema = new Schema({
-    name: String,
+    name: {type: String, unique: true, index: true},
     isOpen: {type: Boolean, default: false}
 });
 

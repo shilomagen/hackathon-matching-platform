@@ -1,25 +1,25 @@
 {
-  "name": "RegistrationPlatform",
+  "name": "mtaregistrationplatform",
   "version": "1.0.0",
-  "description": "User and Teams Registration Platform - First created for HUJI Hackathon 2016",
+  "description": "MTA Registration Platform",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/odedva/RegistrationPlatform.git"
+    "url": "https://github.com/shilomangam/mtaregistrationplatform"
   },
   "keywords": [
     "MEAN",
     "MVC"
   ],
-  "author": "Oded Valtzer <oded.valtzer@gmail.com>",
+  "author": "Shilo Mangam <smangam@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/odedva/RegistrationPlatform/issues"
+    "url": "https://github.com/shilomangam/mtaregistrationplatform/issues"
   },
-  "homepage": "https://github.com/odedva/RegistrationPlatform",
+  "homepage": "https://github.com/shilomangam/mtaregistrationplatform",
   "dependencies": {
     "async": "^1.5.2",
     "aws-sdk": "^2.27.0",
@@ -31,6 +31,8 @@
     "express-session": "^1.10.1",
     "forever": "*",
     "helmet": "^1.3.0",
+    "lodash": "^4.17.4",
+    "mjml": "^3.3.0",
     "mongoose": "^4.2.8",
     "morgan": "^1.7.0",
     "multer": "^1.3.0",
@@ -42,10 +44,9 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.2",
     "q": "^1.4.1",
+    "sendgrid": "^4.7.1",
     "twilio": "^2.11.1",
     "xml": "^1.0.1"
-    "q": "^1.4.1",
-    "sendgrid": "^4.7.1"
   },
   "devDependencies": {
     "gulp-clean-css": "^2.3.2",
