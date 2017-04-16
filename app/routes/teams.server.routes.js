@@ -18,7 +18,7 @@ module.exports = function (app) {
     app.route('/createTeam').get(params.isTeamsOpen, teams.logedIn, teams.createTeamPage);
     app.route('/updateTeam').get(params.isTeamsOpen, teams.logedIn, teams.createUpdateTeamPage);
     app.route('/myTeam').get(params.isTeamsOpen, teams.logedIn, teams.createMyTeamPage);
-    app.route('/vote/:teamId').post(params.isUsersVotingOpen, users.logedIn, teams.updateUserTeamVote);
+    app.route('/vote/:teamId').put(params.isUsersVotingOpen, users.logedIn, teams.validateVotingParams, teams.updateUserTeamVote);
     app.param('teamId', teams.teamByID);
 
 };

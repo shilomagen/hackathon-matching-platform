@@ -18,7 +18,7 @@ const defaultParameters = [
     {name: PARAM_TYPES.USERS_REGISTRATION, isOpen: true, displayName: 'User Registration'},
     {name: PARAM_TYPES.MENTOR_REGISTRATION, isOpen: true, displayName: 'Mentor Registration'},
     {name: PARAM_TYPES.CHAT, isOpen: false, displayName: 'Chat'},
-    {name: PARAM_TYPES.USER_VOTES, isOpen: false, displayName: 'User Votes'},
+    {name: PARAM_TYPES.USER_VOTES, isOpen: true, displayName: 'User Votes'},
     {name: PARAM_TYPES.REALTIME_MENTOR_APP, isOpen: false, displayName: 'Realtime Mentor App'}
 ];
 

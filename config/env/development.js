@@ -17,7 +17,7 @@ var adminEmail= 'mta.hackathon@gmail.com';
 module.exports = {
 	port: port,
 	host: host,
-	db: 'mongodb://localhost/registrationplatform_sandbox',
+	db: 'mongodb://localhost/registrationplatformbackup',
 	emailAddr: 'mta.hackathon@gmail.com',
 	emailPass: 'mtahack2017',
 	supportEmailAddr: 'mta.hackathon@gmail.com',

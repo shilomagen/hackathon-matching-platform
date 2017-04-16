@@ -27,8 +27,6 @@ var smtpConfig = {
     }
 };
 
-// awsSdk.Config(config.awsS3);
-// var cvBucket = new awsSdk.S3({params: {Bucket: 'mtahack-cvs'}});
 var transporter = nodemailer.createTransport(smtpConfig);
 
 function sendContactUsEmail(body) {
