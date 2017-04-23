@@ -583,12 +583,12 @@ exports.renderUploadCV = function(req, res) {
 
 };
 
-exports.register = function(req, res, next) {
+exports.register = function(req, res) {
     if (!req.user) {
         var user = new User(req.body);
         user.provider = 'local';
         user.role = ROLES.Student;
-        user.save(function(err) {
+        user.save((err) => {
             if (err) {
                 console.log(err);
                 var message = getErrorMessage(err);
@@ -874,12 +874,7 @@ exports.userAgree = function(req, res, next) {
 };
 
 exports.isInTeam = function(req, res, next) {
-    var user = req.user;
-    if (user.team.length > 0) {
-        res.status(500).send('already in a team');
-    } else {
-        next();
-    }
+    (req.user.team.length > 0) ? res.status(400).send('User already in a team') : next();
 };
 
 exports.searchUserByEmailAutocomplete = function(req, res) {

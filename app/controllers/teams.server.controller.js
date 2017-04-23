@@ -12,7 +12,9 @@ var Team = require('mongoose').model('Team'),
     async = require("async"),
     config = require('../../config/config'),
     USER_ERRORS = require('./../models/user.server.model').USER_ERROR_TYPES,
-    TEAM_ERRORS = require('./../models/team.server.model').TEAM_ERROR_TYPES;
+    TEAM_ERRORS = require('./../models/team.server.model').TEAM_ERROR_TYPES,
+    emailService = require('./../services').emailService,
+    emailData = require('./../services/email/resources/emails-data');
 
 
 var getErrorMessage = function(err) {
@@ -469,9 +471,20 @@ exports.logedIn = function loggedIn(req, res, next) {
 exports.addUserApplicationToTeam = function(req, res) {
     User.addTeamApplyToUser(req.user, req.params.teamId)
         .then(Team.addUserToAppliers.bind(Team))
-        .then(function(team) {
-            console.log("User was added to team" + team.team_name);
-            res.json("User was added to team" + team.team_name);
+        .then((obj) => {
+            User.findOne({email: obj.team.admin_email}, (err, teamLeader) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json("We had a problem!");
+                } else {
+                    emailService.sendEmail(emailData.TEAM_LEADER_EMAIL_TYPES.USER_APPLIED_TO_TEAM, teamLeader.email, {
+                        teamLeader: teamLeader.first_name,
+                        applierName: obj.user.first_name + " " + obj.user.last_name
+                    });
+                    console.log("User was added as applier to team" + obj.team.team_name);
+                    res.json("User was added to as applier team" + obj.team.team_name);
+                }
+            });
         })
         .catch(function(err) {
             res.status(500).json(getErrorMessage(err));

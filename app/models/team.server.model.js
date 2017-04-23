@@ -32,19 +32,19 @@ var TeamSchema = new Schema({
 
 TeamSchema.statics.addUserToAppliers = function(obj) {
     var deferred = Q.defer();
-    this.findOne({_id: obj.teamId}, function(err, team) {
+    this.findOne({_id: obj.teamId}, (err, team) => {
         if (err) {
             deferred.reject(err);
         } else {
             if (team) {
-                var teamAppliers = team.appliedMembers || [];
+                let teamAppliers = team.appliedMembers || [];
                 teamAppliers.push(obj.user.email);
                 team.appliedMembers = teamAppliers;
                 team.save(function(err) {
                     if (err) {
                         deferred.reject(err);
                     } else {
-                        deferred.resolve(team);
+                        deferred.resolve({team: team, user:obj.user});
                     }
                 });
             } else {

@@ -1,22 +1,22 @@
-var mongoose = require('mongoose'),
+const mongoose = require('mongoose'),
     crypto = require('crypto'),
     Schema = mongoose.Schema,
     Q = require('q'),
     config = require('../../config/config');
 
-var ROLES = {
+const ROLES = {
     SuperAdmin: 'superAdmin',
     Admin: 'admin',
     Student: 'student',
     Mentor: 'mentor'
 };
 
-var ERROR_TYPE = {
+const ERROR_TYPE = {
     USER_ALREADY_IN_TEAM: 120,
     USER_NOT_FOUND: 121
 };
 
-var UserSchema = new Schema({
+const UserSchema = new Schema({
     first_name: String,
     last_name: String,
     email: {
@@ -78,15 +78,15 @@ UserSchema.pre('findOneAndUpdate', function(next) {
 });
 
 UserSchema.methods.authenticate = function(password) {
-    var md5 = crypto.createHash('md5');
+    let md5 = crypto.createHash('md5');
     md5 = md5.update(password).digest('hex');
 
     return this.password === md5;
 };
 
 UserSchema.statics.findUniqueUsername = function(email, suffix, callback) {
-    var _this = this;
-    var possibleEmail = email + (suffix || '');
+    let _this = this;
+    let possibleEmail = email + (suffix || '');
 
     _this.findOne(
         {email: possibleEmail},
@@ -108,28 +108,29 @@ UserSchema.statics.findUniqueUsername = function(email, suffix, callback) {
 
 
 UserSchema.statics.isAdmin = function(user) {
-    if (user && user.email.toLowerCase() === config.adminEmail.toLowerCase()) {
-        return true;
-    }
-    return false;
+    return user && user.email.toLowerCase() === config.adminEmail.toLowerCase();
 };
 
 UserSchema.statics.addTeamApplyToUser = function(user, teamId) {
     var deferred = Q.defer();
-    this.findOne({_id: user._id}, function(err, user) {
+    this.findOne({_id: user._id}, (err, user) =>{
         if (err) {
             deferred.reject(err);
         } else {
-            var appliedTeams = user.appliedTeams || [];
-            appliedTeams.push(teamId);
-            user.appliedTeams = appliedTeams;
-            user.save(function(err) {
-                if (err) {
-                    deferred.reject(err);
-                } else {
-                    deferred.resolve({user: user, teamId: teamId});
-                }
-            });
+            if (!user){
+                deferred.reject(new Error("User was not found"));
+            } else {
+                let appliedTeams = user.appliedTeams || [];
+                appliedTeams.push(teamId);
+                user.appliedTeams = appliedTeams;
+                user.save((err) =>{
+                    if (err) {
+                        deferred.reject(err);
+                    } else {
+                        deferred.resolve({user: user, teamId: teamId});
+                    }
+                });
+            }
         }
     });
     return deferred.promise;

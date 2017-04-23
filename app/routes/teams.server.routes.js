@@ -10,7 +10,7 @@ module.exports = function (app) {
     app.route('/teams/:teamId').get(params.isTeamsOpen, teams.logedIn, users.isUserAdminRole, teams.read)
         .put(params.isTeamsOpen, teams.logedIn, teams.verifyUserPermissionOnUpdateTeam, teams.preVerifyNewTeamMembers, teams.update, teams.updateUserMembership)
         .delete(params.isTeamsOpen, teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.updateRelatedMembers, teams.delete);
-    app.route('/teams/:teamId/apply').post(params.isTeamsOpen, teams.logedIn, users.isInTeam, teams.addUserApplicationToTeam);
+    app.route('/teams/:teamId/apply').post(params.isTeamsOpen, users.logedIn, users.isInTeam, teams.addUserApplicationToTeam);
     app.route('/teams/:teamId/approve').post(teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.approveUserByTeamAdmin)
         .delete(teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.disapproveUserByTeamAdmin);
     app.route('/teams/:teamId/member').post(teams.logedIn, teams.verifyUserPermissionOnCDTeam, teams.addMemberToTeam)
