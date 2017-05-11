@@ -7,7 +7,7 @@ var eventMediaLinks = {
 };
 var maxNumOfUsersInTeam = 4; // maximum supported currently is 6, can be only enforce 6 or lower.
 module.exports = {
-    port: 3000,
+    port: 8080,
     host: 'localhost',
     db: 'mongodb://mta.hackathon:mtahack2017@ds145178.mlab.com:45178/registrationplatform',
     emailAddr: 'mta.hackathon@gmail.com',
