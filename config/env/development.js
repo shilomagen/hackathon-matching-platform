@@ -1,30 +1,30 @@
-var port = process.env.WEB_PORT || 80;
-var host = process.env.IP || '127.0.0.1';
-var mongo = process.env.MONGO_URL || '';
-var emailAddr = process.env.EMAIL_ADDR || '';
-var emailPass = process.env.EMAIL_PASS || '';
-var supportEmailAddr = process.env.SUPP_EMAIL_ADDR || '';
-var eventname = 'MTA Hack';
-var eventMediaLinks = {
-	website: 'http://www.mtahack.com',
-	facebook: 'https://www.facebook.com/mtahack2017',
-	twitter: 'https://twitter.com/mtahackathon',
-	google: 'https://plus.google.com/u/1/113260219787307001341/'
-};
-var eventfacebook = '';
-var maxNumOfUsersInTeam = 4;
-var adminEmail= 'mta.hackathon@gmail.com';
+const ENV = process.env,
+    port = ENV.WEB_PORT || 80,
+    host = ENV.IP || '127.0.0.1',
+    mongo = ENV.MONGO_URL || '',
+    emailAddr = ENV.EMAIL_ADDR || '',
+    emailPass = ENV.EMAIL_PASS || '',
+    supportEmailAddr = ENV.SUPP_EMAIL_ADDR || '',
+    eventname = ENV.EVENT_NAME,
+    eventMediaLinks = {
+        website: ENV.WEB_SITE,
+        facebook: ENV.FACEBOOK,
+        twitter: ENV.TWITTER,
+        google: ENV.GOOGLE_PLUS
+    },
+    maxNumOfUsersInTeam = ENV.MAX_USERS,
+    adminEmail = ENV.ADMIN_EMAIL;
 module.exports = {
-	port: port,
-	host: host,
-	db: 'mongodb://localhost/registrationplatformbackup',
-	emailAddr: 'mta.hackathon@gmail.com',
-	emailPass: 'mtahack2017',
-	supportEmailAddr: 'mta.hackathon@gmail.com',
-	eventname: eventname,
-	eventwebsite: eventMediaLinks.website,
-	eventMediaLinks: eventMediaLinks,
-	maxNumOfUsersInTeam: maxNumOfUsersInTeam,
-	adminEmail: adminEmail
+    port: port,
+    host: host,
+    db: mongo,
+    emailAddr: emailAddr,
+    emailPass: emailPass,
+    supportEmailAddr: supportEmailAddr,
+    eventname: eventname,
+    eventwebsite: eventMediaLinks.website,
+    eventMediaLinks: eventMediaLinks,
+    maxNumOfUsersInTeam: maxNumOfUsersInTeam,
+    adminEmail: adminEmail
 };
 
