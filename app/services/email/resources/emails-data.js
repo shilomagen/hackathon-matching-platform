@@ -68,7 +68,7 @@ module.exports = {
         APPLIED_YES: {
             data: {
                 subject: "You have been approved!",
-                body: `Yay! {{teamLeader}} approved your request, and now your are a part of {{teamName}} team!\n
+                body: `Yay! {{teamName}}'s admin has approved your request, and now your are a part of {{teamName}} team!\n
                 Now the pressure is on you, will you be the one that gives that team what it needs to be the winner?\n\n
                 See you at the {{eventName}} event!\n\n
                 Cheers, {{eventName}} team.`,
@@ -94,7 +94,7 @@ module.exports = {
           </mj-text>
           <mj-text>
             <p style="margin-top: -10px;">
-             Yay! {{teamLeader}} approved your request, and now your are a part of {{teamName}} team!!
+             Yay! {{teamName}}'s admin has approved your request, and now your are a part of {{teamName}} team!
             </p>
             <p>
               Now the pressure is on you, will you be the one that gives that team what it needs to be the winner?
@@ -104,7 +104,7 @@ module.exports = {
             </p>
             <p>Cheers, {{eventName}} team.</p>
           </mj-text>
-          <mj-button font-family="Helvetica" background-color="#e5a552" color="white" href="{{websiteAddress}}/updateTeam"> Update your team now
+          <mj-button font-family="Helvetica" background-color="#e5a552" color="white" href="{{websiteAddress}}/myTeam"> Go to your team page now
 
           </mj-button>
         </mj-column>
@@ -129,7 +129,7 @@ module.exports = {
                 subject: "Your request for a team was declined",
                 body: `Hi {{userName}}
                 "Sometimes it takes time to find a true match"\n\n
-                Unfortunately, {{teamLeader}} decided to look for other teammates.\n\n
+                Unfortunately, {{teamName}}'s admin has decided to look for other teammates.\n\n
                 Don't give up! it's never too late to join a team, login to our Hackathon Platform and look for other open teams.\n\n
                 If the passion is in you, we will sure you find a good team match!\n\n
                 Best regards, {{eventName}} team.`,
@@ -157,7 +157,7 @@ module.exports = {
             <p style="margin-top: -10px;">
            "Sometimes it takes time to find a true match"
             </p>
-            <p>Unfortunately, {{teamLeader}} decided to look for other team mates. </p>
+            <p>Unfortunately, {{teamName}}'s admin has decided to look for other team mates. </p>
             <p>
               It's never too late to join a team, login to our Hackathon Platform and look for other open teams.
             </p>

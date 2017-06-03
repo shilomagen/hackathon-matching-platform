@@ -493,13 +493,19 @@ exports.addUserApplicationToTeam = function(req, res) {
 };
 
 exports.approveUserByTeamAdmin = function(req, res) {
-    User.approveTeamOnUser(req.body.userEmail, req.params.teamId)
+    const userEmail = req.body.userEmail;
+    User.approveTeamOnUser(userEmail, req.params.teamId)
         .then(Team.addUserToTeam.bind(Team))
-        .then(function(team) {
-            console.log("User approved on team " + team.team_name);
-            res.json("User approved on team " + team.team_name);
+        .then(function(data) {
+            emailService.sendEmail(emailData.USER_EMAIL_TYPES.APPLIED_YES, userEmail, {
+                userName: data.user.first_name,
+                teamName: data.team.team_name
+            });
+            console.log("User approved on team " + data.team.team_name);
+            res.json("User approved on team " + data.team.team_name);
         })
         .catch(function(err) {
+            console.error(err);
             if (err.code === TEAM_ERRORS.TEAM_FULL || err.code === USER_ERRORS.USER_ALREADY_IN_TEAM) {
                 res.status(405).send(getErrorMessage(err));
             } else {
@@ -510,11 +516,16 @@ exports.approveUserByTeamAdmin = function(req, res) {
 };
 
 exports.disapproveUserByTeamAdmin = function(req, res) {
+    const userEmail = req.body.userEmail;
     User.dispproveTeamOnUser(req.body.userEmail, req.params.teamId)
         .then(Team.removeUserFromApplied.bind(Team))
-        .then(function(team) {
-            console.log("User removed from appliers on team " + team.team_name);
-            res.json("User removed from appliers on team " + team.team_name);
+        .then(function(data) {
+            emailService.sendEmail(emailData.USER_EMAIL_TYPES.APPLIED_NO, userEmail, {
+                userName: data.user.first_name,
+                teamName: data.team.team_name
+            });
+            console.log("User removed from appliers on team " + data.team.team_name);
+            res.json("User removed from appliers on team " + data.team.team_name);
         })
         .catch(function(err) {
             res.status(500).json(getErrorMessage(err));

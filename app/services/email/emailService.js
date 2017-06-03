@@ -20,7 +20,7 @@ const smtpConfig = {
     },
     defaultContext = {
         eventName: config.eventname,
-        websiteAddress: config.eventwebsite
+        websiteAddress: config.eventwebsite || ''
     };
 
 

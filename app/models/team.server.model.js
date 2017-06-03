@@ -107,7 +107,7 @@ TeamSchema.statics.addUserToTeam = function(obj) {
                 if (err) {
                     deferred.reject(err);
                 } else {
-                    deferred.resolve(team);
+                    deferred.resolve({user: obj.user, team: team});
                 }
             });
         }
@@ -126,7 +126,7 @@ TeamSchema.statics.removeUserFromApplied = function(obj) {
                 if (err) {
                     deferred.reject(err);
                 } else {
-                    deferred.resolve(team);
+                    deferred.resolve({user: obj.user , team: team});
                 }
             });
         }

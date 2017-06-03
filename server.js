@@ -1,13 +1,13 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
+require('dotenv').config();
 const config = require('./config/config'),
     mongoose = require('./config/mongoose'),
     express = require('./config/express'),
-    passport = require('./config/passport'),
     appInitiator = require('./config/init/app.init');
 const db = mongoose(),
-    app = express(),
-    passportInitiator = passport();
+    app = express();
+
+require('./config/passport')();
 appInitiator.initApp()
     .then(() => {
         app.listen(config.port);
