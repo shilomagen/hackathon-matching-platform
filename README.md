@@ -6,17 +6,29 @@ Please create .env file with the following keys:
 
 
 AWS_ACCESS_KEY_ID=
+
 AWS_SECRET_ACCESS_KEY=
+
 AWS_REGION=
+
 S3_BUCKET=
+
 NODE_ENV=development/production
+
 WEB_PORT=
+
 MONGO_URL=
+
 EMAIL_ADDR=
+
 EMAIL_PASS=
+
 SUPP_EMAIL_ADDR=
+
 EVENT_NAME=
+
 MAX_USERS=
+
 ADMIN_EMAIL=
 
 
