@@ -40,3 +40,5 @@ ADMIN_EMAIL=
 For more questions please feel free to contact me on smangam@gmail.com
 
 Shilo
+
+This project inspired by HUJI Hackathon Registration Platform coded by Oded Valtzer
