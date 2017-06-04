@@ -37,6 +37,6 @@ ADMIN_EMAIL=
 2. Run 'gulp'
 3. Run 'node server'
 
-For more questions please contact me :)
+For more questions please feel free to contact me on smangam@gmail.com
 
 Shilo
