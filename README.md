@@ -72,3 +72,5 @@ Eden Swissa: edenswi67@gmail.com
 <div align=center>
 <img src="http://devincci.com/ninjathon/Logo.jpg" width = “60%" alt=“ninjathonlogo"/>
 </div>
+
+This project inspired by HUJI Hackathon Registration Platform coded by Oded Valtzer
