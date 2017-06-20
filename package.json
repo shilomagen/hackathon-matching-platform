@@ -4,7 +4,7 @@
   "description": "MTA Registration Platform",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     "xml": "^1.0.1"
   },
   "devDependencies": {
+    "gulp": "3.9.1",
     "gulp-clean-css": "^2.3.2",
     "gulp-concat": "^2.6.1",
     "gulp-concat-css": "^2.3.0",
