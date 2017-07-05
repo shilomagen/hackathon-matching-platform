@@ -1,22 +1,38 @@
-var eventname = 'MTA Hack 2017';
+
+const ENV = process.env,
+    port = ENV.WEB_PORT || 80,
+    host = ENV.IP || '127.0.0.1',
+    mongo = ENV.MONGO_URL || '',
+    emailAddr = ENV.EMAIL_ADDR || '',
+    emailPass = ENV.EMAIL_PASS || '',
+    supportEmailAddr = ENV.SUPP_EMAIL_ADDR || '',
+    eventname = ENV.EVENT_NAME,
+    eventMediaLinks = {
+        website: ENV.WEB_SITE,
+        facebook: ENV.FACEBOOK,
+        twitter: ENV.TWITTER,
+        google: ENV.GOOGLE_PLUS
+    },
+    maxNumOfUsersInTeam = ENV.MAX_USERS,
+    adminEmail = ENV.ADMIN_EMAIL;
+
 var eventMediaLinks = {
-	website: 'http://ec2-35-167-187-18.us-west-2.compute.amazonaws.com',
-	facebook: 'https://www.facebook.com/mtahack2017',
-	twitter: 'https://twitter.com/mtahackathon',
-	google: 'https://plus.google.com/u/1/113260219787307001341/'
+	website: 'http://ec2-34-211-175-129.us-west-2.compute.amazonaws.com',
+	facebook: 'https://www.facebook.com/datahackil',
+	twitter: 'https://twitter.com/DataHackIL',
+	google: 'https://www.google.com'
 };
-var maxNumOfUsersInTeam = 4; // maximum supported currently is 6, can be only enforce 6 or lower.
 module.exports = {
-    port: 8080,
-    host: 'localhost',
-    db: 'mongodb://mta.hackathon:mtahack2017@ds145178.mlab.com:45178/registrationplatform',
-    emailAddr: 'mta.hackathon@gmail.com',
-    emailPass: 'mtahack2017',
-    supportEmailAddr:'mta.hackathon@gmail.com',
+    port: port,
+    host: host,
+    db: mongo,
+    emailAddr: emailAddr,
+    emailPass: emailPass,
+    supportEmailAddr: supportEmailAddr,
     eventname: eventname,
     eventwebsite: eventMediaLinks.website,
     eventMediaLinks: eventMediaLinks,
     maxNumOfUsersInTeam: maxNumOfUsersInTeam,
-    adminEmail: 'mta.hackathon@gmail.com'
+    adminEmail: adminEmail
 };
 
