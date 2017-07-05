@@ -601,8 +601,8 @@ exports.register = function(req, res) {
             } else {
                 emailService.sendEmail(emailData.WELCOME, user.email, {
                     userName: user.first_name,
-                    eventDate: 'eventData',
-                    eventLocation: 'eventLocation'
+                    eventDate: config.eventDate,
+                    eventLocation: config.eventLocation
                 });
             }
         });
@@ -631,8 +631,8 @@ exports.mentorRegistration = function(req, res) {
             } else {
                 emailService.sendEmail(emailData.WELCOME, user.email, {
                     userName: user.first_name,
-                    eventDate: 'eventData',
-                    eventLocation: 'eventLocation'
+                    eventDate: config.eventDate,
+                    eventLocation: config.eventLocation
                 });
             }
         });
