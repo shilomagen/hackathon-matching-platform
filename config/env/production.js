@@ -7,12 +7,6 @@ const ENV = process.env,
     emailPass = ENV.EMAIL_PASS || '',
     supportEmailAddr = ENV.SUPP_EMAIL_ADDR || '',
     eventname = ENV.EVENT_NAME,
-    eventMediaLinks = {
-        website: ENV.WEB_SITE,
-        facebook: ENV.FACEBOOK,
-        twitter: ENV.TWITTER,
-        google: ENV.GOOGLE_PLUS
-    },
     maxNumOfUsersInTeam = ENV.MAX_USERS,
     adminEmail = ENV.ADMIN_EMAIL;
 
