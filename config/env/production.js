@@ -7,14 +7,10 @@ const ENV = process.env,
     emailPass = ENV.EMAIL_PASS || '',
     supportEmailAddr = ENV.SUPP_EMAIL_ADDR || '',
     eventname = ENV.EVENT_NAME,
-    eventMediaLinks = {
-        website: ENV.WEB_SITE,
-        facebook: ENV.FACEBOOK,
-        twitter: ENV.TWITTER,
-        google: ENV.GOOGLE_PLUS
-    },
     maxNumOfUsersInTeam = ENV.MAX_USERS,
-    adminEmail = ENV.ADMIN_EMAIL;
+    adminEmail = ENV.ADMIN_EMAIL,
+    eventDate = ENV.EVENT_DATE,
+    eventLocation = ENV.EVENT_LOCATION;
 
 var eventMediaLinks = {
 	website: 'http://ec2-34-211-175-129.us-west-2.compute.amazonaws.com',
@@ -33,6 +29,8 @@ module.exports = {
     eventwebsite: eventMediaLinks.website,
     eventMediaLinks: eventMediaLinks,
     maxNumOfUsersInTeam: maxNumOfUsersInTeam,
-    adminEmail: adminEmail
+    adminEmail: adminEmail,
+    eventDate:eventDate, 
+    eventLocation: eventLocation
 };
 
