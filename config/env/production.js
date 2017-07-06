@@ -18,7 +18,6 @@ const ENV = process.env,
     eventDate = ENV.EVENT_DATE,
     eventLocation = ENV.EVENT_LOCATION;
 
-
 module.exports = {
     port: port,
     host: host,
@@ -31,7 +30,7 @@ module.exports = {
     eventMediaLinks: eventMediaLinks,
     maxNumOfUsersInTeam: maxNumOfUsersInTeam,
     adminEmail: adminEmail,
-    eventDate:eventDate,
+    eventDate: eventDate,
     eventLocation: eventLocation
 };
 

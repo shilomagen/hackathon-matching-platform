@@ -605,7 +605,6 @@ exports.register = function(req, res) {
                     eventLocation: config.eventLocation
                 });
                 res.send("User register successfully");
-
             }
         });
     }
@@ -633,10 +632,10 @@ exports.mentorRegistration = function(req, res) {
             } else {
                 emailService.sendEmail(emailData.WELCOME, user.email, {
                     userName: user.first_name,
-                    eventDate: config.eventDate,
-                    eventLocation: config.eventLocation
+                    eventDate: 'eventData',
+                    eventLocation: 'eventLocation'
                 });
-                res.send("Mentor register successfully");
+                res.send("Mentor Registered Successfully");
             }
         });
     }
