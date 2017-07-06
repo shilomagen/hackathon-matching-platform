@@ -1,3 +1,4 @@
+
 const ENV = process.env,
     port = ENV.WEB_PORT || 80,
     host = ENV.IP || '127.0.0.1',
@@ -13,7 +14,10 @@ const ENV = process.env,
         google: ENV.GOOGLE_PLUS
     },
     maxNumOfUsersInTeam = ENV.MAX_USERS,
-    adminEmail = ENV.ADMIN_EMAIL;
+    adminEmail = ENV.ADMIN_EMAIL,
+    eventDate = ENV.EVENT_DATE,
+    eventLocation = ENV.EVENT_LOCATION;
+
 
 module.exports = {
     port: port,
@@ -26,5 +30,8 @@ module.exports = {
     eventwebsite: eventMediaLinks.website,
     eventMediaLinks: eventMediaLinks,
     maxNumOfUsersInTeam: maxNumOfUsersInTeam,
-    adminEmail: adminEmail
+    adminEmail: adminEmail,
+    eventDate:eventDate,
+    eventLocation: eventLocation
 };
+
