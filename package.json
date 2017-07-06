@@ -1,7 +1,7 @@
 {
   "name": "mtaregistrationplatform",
   "version": "1.0.0",
-  "description": "MTA Registration Platform",
+  "description": "Hackathon registration platform",
   "main": "server.js",
   "scripts": {
     "test": "gulp"

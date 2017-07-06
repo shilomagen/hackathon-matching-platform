@@ -75,7 +75,7 @@ module.exports = {
                 mjml_body: `<mjml>
   <mj-head>
     <mj-title>
-      MTA Hack
+      {{eventName}}
     </mj-title>
   </mj-head>
   <mj-body>
@@ -114,7 +114,7 @@ module.exports = {
           <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
           <mj-text>
             <p style="margin-top: -15px;">
-              MTA Hack 2017
+              {{eventName}}
             </p>
           </mj-text>
         </mj-column>
@@ -136,7 +136,7 @@ module.exports = {
                 mjml_body: `<mjml>
   <mj-head>
     <mj-title>
-      MTA Hack
+      {{eventName}}
     </mj-title>
   </mj-head>
   <mj-body>
@@ -176,7 +176,7 @@ module.exports = {
           <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
           <mj-text>
             <p style="margin-top: -15px;">
-              MTA Hack 2017
+             {{eventName}}
             </p>
           </mj-text>
         </mj-column>
@@ -190,7 +190,7 @@ module.exports = {
     TEAM_LEADER_EMAIL_TYPES: {
         USER_APPLIED_TO_TEAM: {
             data: {
-                subject: `MTA Hack 2017 - User applied to your team! `,
+                subject: `{{eventName}} - User applied to your team! `,
                 body: `Hello {{teamLeader}},\n
                 {{applierName}} wants to join your team!\n\n
                 Please accept or reject {{applierName}} as soon as possible.
@@ -198,7 +198,7 @@ module.exports = {
                 mjml_body: `<mjml>
   <mj-head>
     <mj-title>
-      MTA Hack 2017
+      {{eventName}}
     </mj-title>
   </mj-head>
   <mj-body>
@@ -236,7 +236,7 @@ module.exports = {
           <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
           <mj-text>
             <p style="margin-top: -15px;">
-              MTA Hack 2017
+              {{eventName}}
             </p>
           </mj-text>
         </mj-column>
