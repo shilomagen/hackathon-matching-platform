@@ -681,14 +681,19 @@ exports.saveOAuthUserProfile = function(req, profile, done) {
     );
 };
 
-exports.s3StorageConfig = s3({
-    destination: function(req, file, cb) {
-        cb(null, 'students/cvs');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
+try {
+    exports.s3StorageConfig = s3({
+        destination: function(req, file, cb) {
+            cb(null, 'students/cvs');
+        },
+        filename: function(req, file, cb) {
+            cb(null, file.originalname);
+        }
+    });
+} catch (e){
+    console.error("No S3 Bucket has configured.");
+}
+
 
 
 exports.create = function(req, res, next) {
