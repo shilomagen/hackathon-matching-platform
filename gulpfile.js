@@ -14,7 +14,7 @@ var jsFiles = 'public/assets/js/*.js',
 	cssDest = 'public/dist/styles',
 	jsAdminFiles = 'public/assets/js/admin/*.js';
 
-gulp.task('default', ['scripts', 'admin-scripts', 'styles', 'watch']);
+gulp.task('default', ['scripts', 'admin-scripts', 'styles']);
 
 gulp.task('scripts', function() {
 	return gulp.src(jsFiles)
@@ -43,8 +43,8 @@ gulp.task('styles', function() {
 		.pipe(gulp.dest(cssDest));
 });
 
-gulp.task('watch', function() {
-	gulp.watch(jsFiles, ['scripts']);
-	gulp.watch(jsAdminFiles, ['admin-scripts']);
-	gulp.watch(cssFiles, ['styles']);
-});
+// gulp.task('watch', function() {
+// 	gulp.watch(jsFiles, ['scripts']);
+// 	gulp.watch(jsAdminFiles, ['admin-scripts']);
+// 	gulp.watch(cssFiles, ['styles']);
+// });

@@ -28,7 +28,7 @@ var TeamSchema = new Schema({
     exp: String,
     number_of_voters: {type: Number, default: 0},
     vote_avg: {type: Number, default: 0}
-});
+},{usePushEach: true});
 
 TeamSchema.statics.addUserToAppliers = function(obj) {
     var deferred = Q.defer();
